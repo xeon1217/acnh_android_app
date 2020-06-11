@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item android:title="주민 관련">
+            <menu>
+                <item android:id="@+id/villagerList" android:title="@string/title_activity_villager_list" />
+                <item android:id="@+id/reactionList" android:title="@string/title_activity_reaction_list" />
+            </menu>
+        </item>
+    </group>
+    <group>
+        <item android:title="도감">
+            <menu>
+                <item android:id="@+id/creatureBook" android:title="@string/title_activity_creature_book" />
+                <item android:id="@+id/artBook" android:title="@string/title_activity_art_book" />
+                <item android:id="@+id/fossilBook" android:title="@string/title_activity_fossil_book" />
+                <item android:id="@+id/achievementList" android:title="@string/title_activity_achievement_list" />
+                <item android:id="@+id/diyList" android:title="@string/title_activity_diy_list" />
+            </menu>
+        </item>
+    </group>
+    <group>
+        <item android:title="기타">
+            <menu>
+                <item android:id="@+id/c" android:title="버그 리포트" />
+                <item android:id="@+id/b" android:title="문의 및 개선사항" />
+                <item android:id="@+id/a" android:title="참고한 자료 및 출처" />
+            </menu>
+        </item>
+    </group>
+
+    <!--
+    출처, 문의, 개선, 버그리포트, 팁, 듀토리얼
+    -->
+</menu>

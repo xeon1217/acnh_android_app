@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.anch_kotiln">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".Utility.IO"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/MainTheme"
+        tools:targetApi="n">
+        <activity android:name=".Activity.ArtBook.ArtBookActivity" />
+        <activity
+            android:name=".Activity.ArtBook.ArtBookPopupActivity"
+            android:theme="@style/CustomDialogTheme" />
+        <activity android:name=".Activity.FossilBook.FossilBookActivity" />
+        <activity
+            android:name=".Activity.FossilBook.FossilBookPopupActivity"
+            android:theme="@style/CustomDialogTheme" />
+        <activity android:name=".Activity.ReactionList.ReactionListActivity" />
+        <activity android:name=".Activity.CreatureBook.CreatureBookActivity" />
+        <activity
+            android:name=".Activity.CreatureBook.CreatureBookFishPopupActivity"
+            android:theme="@style/CustomDialogTheme" />
+        <activity
+            android:name=".Activity.CreatureBook.CreatureBookInsectPopupActivity"
+            android:theme="@style/CustomDialogTheme" />
+        <activity android:name=".Activity.VillagerList.VillagerListActivity" />
+        <activity
+            android:name=".Activity.VillagerList.VillagerListPopupActivity"
+            android:theme="@style/CustomDialogTheme" />
+        <activity android:name=".Activity.Menu.MenuActivity" />
+        <activity android:name=".Activity.Menu.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

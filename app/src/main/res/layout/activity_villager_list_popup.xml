@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_background"
+        android:orientation="vertical"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:weightSum="1">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/villagerListPopupToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/round_all_toolbar"
+            android:gravity="center_horizontal"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:titleTextColor="#606060" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/villagerListPopupImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="7dp"
+                android:layout_weight="2"
+                android:background="@drawable/round_menu_background"
+                android:padding="5dp"
+                android:transitionName="pair_thumb" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="7dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="3dp">
+
+                        <!--
+
+        _motto: String
+                        -->
+                        <TextView
+                            android:id="@+id/villagerListPopupPersonalityTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:text="성격"
+                            android:textAlignment="textStart"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/villagerListPopupPersonalityTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:text="성격"
+                            android:textAlignment="textEnd"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="3dp">
+
+                        <TextView
+                            android:id="@+id/villagerListPopupSpeciesTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:text="종"
+                            android:textAlignment="textStart"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/villagerListPopupSpeciesTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:text="종"
+                            android:textAlignment="textEnd"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="3dp">
+
+                        <TextView
+                            android:id="@+id/villagerListPopupBirthdayTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:text="생일"
+                            android:textAlignment="textStart"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/villagerListPopupBirthdayTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:text="생일"
+                            android:textAlignment="textEnd"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="3dp">
+
+                        <TextView
+                            android:id="@+id/villagerListPopupHobbyTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:text="취미"
+                            android:textAlignment="textStart"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/villagerListPopupHobbyTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:text="취미"
+                            android:textAlignment="textEnd"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="3dp">
+
+                        <TextView
+                            android:id="@+id/villagerListPopupCatchphraseTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:layout_marginEnd="5dp"
+                            android:text="말버릇"
+                            android:textAlignment="textStart"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/villagerListPopupCatchphraseTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center|center_horizontal|center_vertical"
+                            android:text="말버릇"
+                            android:textAlignment="textEnd"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/villagerListPopupFavoritePhraseTitleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_horizontal|center_vertical"
+                    android:text="좋아하는 말"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/villagerListPopupFavoritePhraseTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_horizontal|center_vertical"
+                    android:padding="5dp"
+                    android:text="좋아하는 말"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/villagerListPopupCancelButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/round_menu_background"
+                android:onClick="onClickCancelButton"
+                android:text="@string/close" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

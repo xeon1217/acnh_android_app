@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">모동숲 백과사전</string>
+    <string name="title_activity_creature_book">생물 도감</string>
+    <string name="title_activity_realtime_book">실시간 도감</string>
+    <string name="title_activity_insect_book">곤충 도감</string>
+    <string name="title_activity_fish_book">물고기 도감</string>
+    <string name="title_activity_art_book">그림 도감</string>
+    <string name="title_activity_fossil_book">화석 도감</string>
+    <string name="title_activity_diy_list">DIY 레시피 목록</string>
+    <string name="title_activity_achievement_list">너굴 마일리지 목록</string>
+    <string name="title_activity_villager_list">주민 목록</string>
+    <string name="title_activity_reaction_list">리액션 목록</string>
+
+    <string name="source">자료 및 출처 : https://animalcrossing.soopoolleaf.com/ko/acnh/</string>
+
+    <string name="yes">응</string>
+    <string name="no">아니</string>
+    <string name="confirm">확인</string>
+    <string name="open">열기</string>
+    <string name="close">닫기</string>
+    <string name="cancel">취소</string>
+    <string name="front">앞으로</string>
+    <string name="back">뒤로</string>
+    <string name="success">성공</string>
+    <string name="exit">종료할래</string>
+
+    <string name="unimplemented_function">구현되지 않은 기능이에요.</string>
+    <string name="failure_connect_server">업데이트 서버와 연결하는데 실패했습니다.</string>
+    <string name="success_connect_server">업데이트 서버에 연결하는데 성공했습니다.</string>
+    <string name="connecting_to_server">업데이트 서버와 연결 중입니다.</string>
+    <string name="found_to_require_update">중요 업데이트가 있습니다.</string>
+    <string name="found_to_update">업데이트가 있습니다.</string>
+    <string name="update">업데이트할까요?</string>
+    <string name="updating">업데이트 중입니다.</string>
+    <string name="not_update_server_run">업데이트를 하지 않고 실행할까요?</string>
+    <string name="not_connect_server_run">서버와 연결하지 않고 실행할까요?</string>
+    <string name="first_require_update">최초 1회 업데이트가 필요합니다.</string>
+
+    <string-array name="date_array"></string-array>
+    <string-array name="time_array"></string-array>
+</resources>
