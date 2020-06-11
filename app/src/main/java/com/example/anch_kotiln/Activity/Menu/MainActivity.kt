@@ -40,10 +40,40 @@ class MainActivity : AppCompatActivity() {
             context = _context
         }
 
+        override fun update(status: Int) {
+
+        }
+
+        override fun firstUpdate() {
+            mainStatusTextview.text = "업데이트 중입니다."
+            mainStatusProgressBar.isVisible = true
+            val alertDialog: AlertDialog = context.let {
+                val builder = AlertDialog.Builder(it)
+                builder.setTitle("처음으로 앱을 설치하셨네요!")
+                builder.setMessage("최초 1회 한정으로\n데이터를 업데이트해야 합니다.\n데이터를 받아올까요?")
+                builder.apply {
+                    setPositiveButton("받기",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            mainStatusTextviewCancelButton.isVisible = true
+                            versionController.update()
+                        })
+                    setNegativeButton("종료",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            System.runFinalization()
+                            exitProcess(0)
+                        })
+                }
+                builder.create()
+            }
+            alertDialog.setCancelable(false)
+            alertDialog.show()
+        }
+
         override fun finishUpdate() {
             versionController.finishUpdate()
             startActivity(
-                Intent(context, MenuActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                Intent(context, MenuActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
         }
 
@@ -69,7 +99,11 @@ class MainActivity : AppCompatActivity() {
                         DialogInterface.OnClickListener { dialog, which ->
                             versionController.jsonToData()
                             startActivity(
-                                Intent(context, MenuActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                Intent(
+                                    context,
+                                    MenuActivity::class.java
+                                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             )
                         })
                 }
@@ -105,7 +139,11 @@ class MainActivity : AppCompatActivity() {
                         DialogInterface.OnClickListener { dialog, which ->
                             versionController.jsonToData()
                             startActivity(
-                                Intent(context, MenuActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                Intent(
+                                    context,
+                                    MenuActivity::class.java
+                                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                             )
                         })
                 }
@@ -163,6 +201,8 @@ class MainActivity : AppCompatActivity() {
 
     interface Callback {
         fun setContext(_context: Context)
+        fun update(status: Int)
+        fun firstUpdate()
         fun finishUpdate()
         fun foundUpdate()
         fun notFoundUpdate()

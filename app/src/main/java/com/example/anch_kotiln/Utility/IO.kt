@@ -112,6 +112,7 @@ class IO : Application() {
         val table = "table" // 버전 조회용
         val value = "value" // 값 조회용
         val finishUpdate = "finish_update"
+        val first = "is_first"
         var version = "version"
         var villager = "villager"
         var fish = "fish"

@@ -43,7 +43,11 @@ class VersionController {
                 Log.d(tag, "Request Fail!")
                 Log.d(tag, "message : ${t.message}")
                 //연결 실패
-                mCallback.failureConnectServer()
+                if(!IO.preferenceManager.getBoolean(IO.key.first)) {
+                    mCallback.firstUpdate()
+                } else {
+                    mCallback.failureConnectServer()
+                }
             }
 
             override fun onResponse(
@@ -87,10 +91,14 @@ class VersionController {
                     }
                 }
 
-                if (foundUpdate > 0) { //업데이트가 있음
-                    mCallback.foundUpdate()
-                } else { //업데이트가 없음
-                    mCallback.notFoundUpdate()
+                if(!IO.preferenceManager.getBoolean(IO.key.first)) {
+                    mCallback.firstUpdate()
+                } else {
+                    if (foundUpdate > 0) { //업데이트가 있음
+                        mCallback.foundUpdate()
+                    } else { //업데이트가 없음
+                        mCallback.notFoundUpdate()
+                    }
                 }
             }
         })
@@ -127,6 +135,7 @@ class VersionController {
     }
 
     fun finishUpdate() {
+        IO.preferenceManager.setBoolean(IO.key.first, true)
         val versionArray =
             JsonParser().parse(IO.preferenceManager.getValue(IO.key.version)).asJsonArray
         if (!versionArray.isJsonNull) {
