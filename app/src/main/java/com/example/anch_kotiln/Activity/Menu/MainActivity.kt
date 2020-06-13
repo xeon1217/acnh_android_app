@@ -204,12 +204,12 @@ class MainActivity : AppCompatActivity() {
             builder.setTitle(getString(R.string.action_cancel_update_title))
             builder.setCancelable(false)
             builder.apply {
-                setPositiveButton(getString(R.string.do_not_it),
+                setPositiveButton(getString(R.string.do_it),
                     DialogInterface.OnClickListener { dialog, id ->
                         System.runFinalization()
                         exitProcess(0)
                     })
-                setNegativeButton(getString(R.string.do_it),
+                setNegativeButton(getString(R.string.do_not_it),
                     DialogInterface.OnClickListener { dialog, id ->
                     })
             }

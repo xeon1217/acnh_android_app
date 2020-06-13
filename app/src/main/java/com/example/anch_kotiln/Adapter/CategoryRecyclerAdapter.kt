@@ -40,7 +40,6 @@ class CategoryRecyclerAdapter(val context: Context, list: ArrayList<ObjectDTO>) 
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //holder.itemImageView.background = BitmapDrawable.createFromPath("${IO.file.path}/${filteredData[position].imageIconResource}")
         holder.itemImageView.setImageBitmap(BitmapFactory.decodeFile("${IO.file.path}/${filteredData[position].imageIconResource}"))
         holder.itemNameTextView.text = filteredData[position].name
         holder.itemView.setOnClickListener {
