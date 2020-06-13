@@ -53,7 +53,7 @@
             android:layout_weight="1"
             android:background="@drawable/round_menu_background"
             android:onClick="onCancelButtonClick"
-            android:text="취소하기"
+            android:text="@string/cancel"
             android:visibility="gone" />
     </LinearLayout>
 
