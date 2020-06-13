@@ -26,4 +26,17 @@ class Network {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    enum class Status(val status: String) {
+        FIRST(""),
+        FIRST_AND_FAIL_CONNECT_TO_SERVER(""),
+        FAIL_CONNECT_TO_SERVER(""),
+        REQUIRE_UPDATE(""),
+        NOT_REQUIRE_UPDATE(""),
+        SUCCESS_CONNECT_TO_SERVER("");
+
+        override fun toString(): String {
+            return super.toString()
+        }
+    }
 }

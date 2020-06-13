@@ -25,10 +25,6 @@ class VersionController {
                 IO.ImageDownloader(mCallback).execute(images)
             }
         }
-
-        override fun failRequest() {
-
-        }
     }
 
     fun retryUpdate() {
@@ -39,21 +35,21 @@ class VersionController {
         mCallback = _callback
         setCallback()
         service.getAllVersions().enqueue(object : Callback<List<VersionVO>> {
-            override fun onFailure(call: Call<List<VersionVO>>, t: Throwable) {
+            override fun onFailure(call: Call<List<VersionVO>>, t: Throwable) { //연결 실패
                 Log.d(tag, "Request Fail!")
                 Log.d(tag, "message : ${t.message}")
-                //연결 실패
-                if(!IO.preferenceManager.getBoolean(IO.key.first)) {
-                    mCallback.firstUpdate()
+                mCallback.updateProgressBar("서버와 연결하는데 실패했습니다.")
+                if (!IO.preferenceManager.getBoolean(IO.key.first)) {
+                    mCallback.connect(Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER)
                 } else {
-                    mCallback.failureConnectServer()
+                    mCallback.connect(Network.Status.FAIL_CONNECT_TO_SERVER)
                 }
             }
 
             override fun onResponse(
                 call: Call<List<VersionVO>>,
                 response: Response<List<VersionVO>>
-            ) {
+            ) { //연결 성공
                 Log.d(tag, "Request Success!")
                 Log.d(tag, "response value : ${response.body()}")
                 Log.d(tag, "response length : ${response.body()?.size}")
@@ -61,19 +57,16 @@ class VersionController {
                 Log.d(tag, "response massage : ${response.message()}")
                 Log.d(tag, "response code : ${response.code()}")
                 Log.d(tag, "response url : ${response.raw().request().url()}")
-                //연결 성공
-
-                mCallback.updateProgressBar("서버와 연결하는데 성공했습니다.")
 
                 IO.preferenceManager.setValue(IO.key.version, Network.gson.toJson(response.body()))
-                Log.d(tag, IO.preferenceManager.getValue(IO.key.version))
+                Log.d(tag, "${IO.preferenceManager.getValue(IO.key.version)}")
 
                 val versionArray =
                     JsonParser().parse(IO.preferenceManager.getValue(IO.key.version)).asJsonArray
                 if (!versionArray.isJsonNull) {
                     versionArray.forEach {
                         var vo = Network.gson.fromJson(it, VersionVO::class.java)
-                        if ((IO.preferenceManager.getVersion("${vo.tableName}") != vo.version) or (!IO.preferenceManager.getBoolean(
+                        if ((IO.preferenceManager.getVersion(vo.tableName) != vo.version) or (!IO.preferenceManager.getBoolean(
                                 "${vo.tableName}${IO.key.finishUpdate}"
                             ))
                         ) {
@@ -82,7 +75,7 @@ class VersionController {
                         Log.d(tag, "Table Name : ${vo.tableName}")
                         Log.d(
                             tag,
-                            "Version : ${IO.preferenceManager.getVersion("${vo.tableName}")} :: ${vo.version}"
+                            "Version : ${IO.preferenceManager.getVersion(vo.tableName)} :: ${vo.version}"
                         )
                         Log.d(
                             tag,
@@ -91,13 +84,14 @@ class VersionController {
                     }
                 }
 
-                if(!IO.preferenceManager.getBoolean(IO.key.first)) {
-                    mCallback.firstUpdate()
+                mCallback.updateProgressBar("서버와 연결하는데 성공했습니다.")
+                if (!IO.preferenceManager.getBoolean(IO.key.first)) {
+                    mCallback.connect(Network.Status.FIRST) // 최초 기동
                 } else {
-                    if (foundUpdate > 0) { //업데이트가 있음
-                        mCallback.foundUpdate()
-                    } else { //업데이트가 없음
-                        mCallback.notFoundUpdate()
+                    if (foundUpdate > 0) {
+                        mCallback.connect(Network.Status.REQUIRE_UPDATE) //업데이트가 있음
+                    } else {
+                        mCallback.connect(Network.Status.NOT_REQUIRE_UPDATE) //업데이트가 없음
                     }
                 }
             }
@@ -110,7 +104,7 @@ class VersionController {
         if (!versionArray.isJsonNull) {
             versionArray.forEach {
                 var vo = Network.gson.fromJson(it, VersionVO::class.java)
-                if ((IO.preferenceManager.getVersion("${vo.tableName}") != vo.version) or (!IO.preferenceManager.getBoolean(
+                if ((IO.preferenceManager.getVersion(vo.tableName) != vo.version) or (!IO.preferenceManager.getBoolean(
                         "${vo.tableName}${IO.key.finishUpdate}"
                     ))
                 ) {
@@ -141,7 +135,7 @@ class VersionController {
         if (!versionArray.isJsonNull) {
             versionArray.forEach {
                 var vo = Network.gson.fromJson(it, VersionVO::class.java)
-                IO.preferenceManager.setVersion("${vo.tableName}", vo.version)
+                IO.preferenceManager.setVersion(vo.tableName, vo.version)
                 IO.preferenceManager.setBoolean("${vo.tableName}${IO.key.finishUpdate}", true)
             }
         }
@@ -177,6 +171,5 @@ class VersionController {
 
     interface VersionCallback {
         fun successRequest(_images: ArrayList<IO.Image>)
-        fun failRequest()
     }
 }

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.example.anch_kotiln.Controller.*
 import com.example.anch_kotiln.R
+import com.example.anch_kotiln.Utility.Network
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.zip.Inflater
 import kotlin.system.exitProcess
@@ -40,33 +41,130 @@ class MainActivity : AppCompatActivity() {
             context = _context
         }
 
-        override fun update(status: Int) {
-
-        }
-
-        override fun firstUpdate() {
-            mainStatusTextview.text = "업데이트 중입니다."
-            mainStatusProgressBar.isVisible = true
-            val alertDialog: AlertDialog = context.let {
-                val builder = AlertDialog.Builder(it)
-                builder.setTitle("처음으로 앱을 설치하셨네요!")
-                builder.setMessage("최초 1회 한정으로\n데이터를 업데이트해야 합니다.\n데이터를 받아올까요?")
-                builder.apply {
-                    setPositiveButton("받기",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            mainStatusTextviewCancelButton.isVisible = true
-                            versionController.update()
-                        })
-                    setNegativeButton("종료",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            System.runFinalization()
-                            exitProcess(0)
-                        })
+        override fun connect(status: Network.Status) {
+            when (status) {
+                Network.Status.FIRST -> {
+                    mainStatusTextview.text = "업데이트 중입니다."
+                    mainStatusProgressBar.isVisible = true
+                    val alertDialog: AlertDialog = context.let {
+                        val builder = AlertDialog.Builder(it)
+                        builder.setTitle(status.toString())
+                        builder.setMessage("데이터를 업데이트해야 합니다.\n데이터를 받아올까요?")
+                        builder.apply {
+                            setPositiveButton("받기",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    mainStatusTextviewCancelButton.isVisible = true
+                                    versionController.update()
+                                })
+                            setNegativeButton("종료",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    System.runFinalization()
+                                    exitProcess(0)
+                                })
+                        }
+                        builder.create()
+                    }
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
                 }
-                builder.create()
+                Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER -> {
+                    val alertDialog: AlertDialog = context.let {
+                        val builder = AlertDialog.Builder(it)
+                        builder.setTitle("업데이트 서버와 연결하지 못했습니다.")
+                        builder.setMessage("다시 시도할까요?")
+                        builder.setCancelable(false)
+                        builder.apply {
+                            setPositiveButton("다시 시도",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    versionController.retryUpdate()
+                                })
+                            setNegativeButton("종료",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    System.runFinalization()
+                                    exitProcess(0)
+                                })
+                        }
+                        builder.create()
+                    }
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+                Network.Status.REQUIRE_UPDATE -> {
+                    mainStatusTextview.text = "업데이트 중입니다."
+                    mainStatusProgressBar.isVisible = true
+                    val alertDialog: AlertDialog = context.let {
+                        val builder = AlertDialog.Builder(it)
+                        builder.setTitle("업데이트가 있습니다.")
+                        builder.setMessage("업데이트 할까요?")
+                        builder.apply {
+                            setPositiveButton("하기",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    mainStatusTextviewCancelButton.isVisible = true
+                                    versionController.update()
+                                })
+                            setNegativeButton("하지 않기",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    System.runFinalization()
+                                    exitProcess(0)
+                                })
+                            setNeutralButton("나중에 하기",
+                                DialogInterface.OnClickListener { dialog, which ->
+                                    versionController.jsonToData()
+                                    startActivity(
+                                        Intent(
+                                            context,
+                                            MenuActivity::class.java
+                                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                    )
+                                })
+                        }
+                        builder.create()
+                    }
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+                Network.Status.NOT_REQUIRE_UPDATE -> {
+                    mainStatusTextview.text = "업데이트가 필요 없어요"
+                    versionController.jsonToData()
+                    finishUpdate()
+                }
+                Network.Status.FAIL_CONNECT_TO_SERVER -> {
+                    val alertDialog: AlertDialog = context.let {
+                        val builder = AlertDialog.Builder(it)
+                        builder.setTitle("업데이트 서버와 연결하지 못했습니다.")
+                        builder.setMessage("다시 시도할까요?")
+                        builder.setCancelable(false)
+                        builder.apply {
+                            setPositiveButton("다시 시도",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    versionController.retryUpdate()
+                                })
+                            setNegativeButton("종료",
+                                DialogInterface.OnClickListener { dialog, id ->
+                                    System.runFinalization()
+                                    exitProcess(0)
+                                })
+                            setNeutralButton("나중에 하기",
+                                DialogInterface.OnClickListener { dialog, which ->
+                                    versionController.jsonToData()
+                                    startActivity(
+                                        Intent(
+                                            context,
+                                            MenuActivity::class.java
+                                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                    )
+                                })
+                        }
+                        builder.create()
+                    }
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                }
+                Network.Status.SUCCESS_CONNECT_TO_SERVER -> {
+                }
             }
-            alertDialog.setCancelable(false)
-            alertDialog.show()
         }
 
         override fun finishUpdate() {
@@ -75,82 +173,6 @@ class MainActivity : AppCompatActivity() {
                 Intent(context, MenuActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             )
-        }
-
-        override fun foundUpdate() {
-            mainStatusTextview.text = "업데이트 중입니다."
-            mainStatusProgressBar.isVisible = true
-            val alertDialog: AlertDialog = context.let {
-                val builder = AlertDialog.Builder(it)
-                builder.setTitle("업데이트가 있습니다.")
-                builder.setMessage("업데이트 할까요?")
-                builder.apply {
-                    setPositiveButton("하기",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            mainStatusTextviewCancelButton.isVisible = true
-                            versionController.update()
-                        })
-                    setNegativeButton("하지 않기",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            System.runFinalization()
-                            exitProcess(0)
-                        })
-                    setNeutralButton("나중에 하기",
-                        DialogInterface.OnClickListener { dialog, which ->
-                            versionController.jsonToData()
-                            startActivity(
-                                Intent(
-                                    context,
-                                    MenuActivity::class.java
-                                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            )
-                        })
-                }
-                builder.create()
-            }
-            alertDialog.setCancelable(false)
-            alertDialog.show()
-        }
-
-        override fun notFoundUpdate() {
-            mainStatusTextview.text = "업데이트가 필요 없어요"
-            versionController.jsonToData()
-            finishUpdate()
-        }
-
-        override fun failureConnectServer() {
-            val alertDialog: AlertDialog = context.let {
-                val builder = AlertDialog.Builder(it)
-                builder.setTitle("업데이트 서버와 연결하지 못했습니다.")
-                builder.setMessage("다시 시도할까요?")
-                builder.setCancelable(false)
-                builder.apply {
-                    setPositiveButton("다시 시도",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            versionController.retryUpdate()
-                        })
-                    setNegativeButton("종료",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            System.runFinalization()
-                            exitProcess(0)
-                        })
-                    setNeutralButton("나중에 하기",
-                        DialogInterface.OnClickListener { dialog, which ->
-                            versionController.jsonToData()
-                            startActivity(
-                                Intent(
-                                    context,
-                                    MenuActivity::class.java
-                                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            )
-                        })
-                }
-                builder.create()
-            }
-            alertDialog.setCancelable(false)
-            alertDialog.show()
         }
 
         override fun updateProgressBar(_progress: Int) {
@@ -177,8 +199,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onCancelButtonClick(v: View) {
-        System.runFinalization()
-        exitProcess(0)
+        val alertDialog: AlertDialog = this.let {
+            val builder = AlertDialog.Builder(it)
+            builder.setTitle("업데이트를 취소할까요?")
+            builder.setCancelable(false)
+            builder.apply {
+                setPositiveButton("취소할래",
+                    DialogInterface.OnClickListener { dialog, id ->
+                        System.runFinalization()
+                        exitProcess(0)
+                    })
+                setNegativeButton("잘못 눌렀어",
+                    DialogInterface.OnClickListener { dialog, id ->
+                    })
+            }
+            builder.create()
+        }
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 
     fun exit() {
@@ -201,12 +239,8 @@ class MainActivity : AppCompatActivity() {
 
     interface Callback {
         fun setContext(_context: Context)
-        fun update(status: Int)
-        fun firstUpdate()
+        fun connect(status: Network.Status)
         fun finishUpdate()
-        fun foundUpdate()
-        fun notFoundUpdate()
-        fun failureConnectServer()
         fun updateProgressBar(_progress: Int)
         fun updateProgressBar(_text: String)
     }
