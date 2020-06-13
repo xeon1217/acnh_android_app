@@ -39,6 +39,27 @@
             android:text="@string/title_activity_fish_book" />
     </com.google.android.material.tabs.TabLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/creatureDateSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:dropDownWidth="wrap_content"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/creatureTimeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/realtimeRecyclerView"
         android:layout_width="match_parent"
@@ -46,9 +67,7 @@
         android:background="@color/colorBackground"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:visibility="visible">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/insectRecyclerView"

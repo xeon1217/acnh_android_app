@@ -1,21 +1,24 @@
 package com.example.anch_kotiln.Activity.ArtBook
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.example.anch_kotiln.Model.DTO.ArtDTO
 import com.example.anch_kotiln.R
+import kotlinx.android.synthetic.main.activity_art_book.*
 
 class ArtBookActivity : AppCompatActivity() {
-    companion object {
-        val items: ArrayList<ArtDTO> = ArrayList()
 
-        fun getItem() {
-
-        }
+    private fun initToolbar() {
+        artBookToolbar.title = getString(R.string.title_activity_art_book)
+        setSupportActionBar(artBookToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    fun initToolbar() {
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     fun bind() {

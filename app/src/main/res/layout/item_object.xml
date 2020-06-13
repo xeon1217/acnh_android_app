@@ -19,25 +19,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/itemImageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_height="50dp"
                 android:layout_weight="0.8"
-                android:paddingTop="5dp"
-                android:scaleType="centerCrop"
+                android:padding="5dp"
+                android:scaleType="centerInside"
                 android:transitionName="pair_thumb" />
 
             <TextView
                 android:id="@+id/itemNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="4dp"
-                android:layout_marginTop="6dp"
                 android:layout_weight="0.2"
                 android:text="아이템 이름"
                 android:textAlignment="center"

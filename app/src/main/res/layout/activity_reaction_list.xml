@@ -23,9 +23,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorBackground"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:visibility="visible">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:paddingRight="10dp" />
 
 </LinearLayout>

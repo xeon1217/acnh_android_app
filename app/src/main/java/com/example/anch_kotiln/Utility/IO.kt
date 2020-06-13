@@ -32,25 +32,13 @@ class IO : Application() {
         super.onCreate()
     }
 
-    fun saveImages() {
-
-    }
-
-    fun deleteImage() {
-
-    }
-
-    fun deleteImages() {
-
-    }
-
     class ImageDownloader(var callback: MainActivity.Callback) :
         AsyncTask<List<Image>, Int, Int>() {
         override fun doInBackground(vararg imageNames: List<Image>): Int {
             var bitmap: Bitmap
             var imagePath: File
             var fos: FileOutputStream
-            var count: Float = 1f
+            var count = 0f
             var temp = 0
 
             Log.d(TAG, "${imageNames.size}")
@@ -109,10 +97,15 @@ class IO : Application() {
     )
 
     class Key {
+        // 테이블 조회 관련 Key
         val table = "table" // 버전 조회용
         val value = "value" // 값 조회용
-        val finishUpdate = "finish_update"
-        val first = "is_first"
+
+        // 상태 관련 Key
+        val finishUpdate = "finish_update" // 업데이트가 정상적으로 되었는지?
+        val first = "is_first" // 처음으로 앱을 실행했는지?
+
+        // 테이블 이름 관련 Key
         var version = "version"
         var villager = "villager"
         var fish = "fish"

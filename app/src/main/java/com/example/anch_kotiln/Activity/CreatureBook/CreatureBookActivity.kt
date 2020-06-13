@@ -3,6 +3,9 @@ package com.example.anch_kotiln.Activity.CreatureBook
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Adapter
+import android.widget.ArrayAdapter
+import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -141,6 +144,9 @@ private var realtimeAdapter: ItemRecyclerAdapter? = null
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_creature_book)
 
+        //creatureDateSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, resources.getStringArray(R.array.date_array))
+        creatureDateSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, resources.getStringArray(R.array.date_array))
+        creatureTimeSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, resources.getStringArray(R.array.time_array))
         initToolbar()
         bind()
     }

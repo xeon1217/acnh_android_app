@@ -44,19 +44,19 @@ class MainActivity : AppCompatActivity() {
         override fun connect(status: Network.Status) {
             when (status) {
                 Network.Status.FIRST -> {
-                    mainStatusTextview.text = "업데이트 중입니다."
+                    mainStatusTextview.text = getString(R.string.status_updating)
                     mainStatusProgressBar.isVisible = true
                     val alertDialog: AlertDialog = context.let {
                         val builder = AlertDialog.Builder(it)
-                        builder.setTitle(status.toString())
-                        builder.setMessage("데이터를 업데이트해야 합니다.\n데이터를 받아올까요?")
+                        builder.setTitle(getString(R.string.action_first_app_start_title))
+                        builder.setMessage(getString(R.string.action_first_app_start_message))
                         builder.apply {
-                            setPositiveButton("받기",
+                            setPositiveButton(getString(R.string.receive_it),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     mainStatusTextviewCancelButton.isVisible = true
                                     versionController.update()
                                 })
-                            setNegativeButton("종료",
+                            setNegativeButton(getString(R.string.receive_not_it),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     System.runFinalization()
                                     exitProcess(0)
@@ -70,15 +70,15 @@ class MainActivity : AppCompatActivity() {
                 Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER -> {
                     val alertDialog: AlertDialog = context.let {
                         val builder = AlertDialog.Builder(it)
-                        builder.setTitle("업데이트 서버와 연결하지 못했습니다.")
-                        builder.setMessage("다시 시도할까요?")
+                        builder.setTitle(getString(R.string.action_failure_connect_to_server_title))
+                        builder.setMessage(getString(R.string.action_failure_connect_to_server_message))
                         builder.setCancelable(false)
                         builder.apply {
-                            setPositiveButton("다시 시도",
+                            setPositiveButton(getString(R.string.retry),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     versionController.retryUpdate()
                                 })
-                            setNegativeButton("종료",
+                            setNegativeButton(getString(R.string.do_not_it),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     System.runFinalization()
                                     exitProcess(0)
@@ -90,24 +90,24 @@ class MainActivity : AppCompatActivity() {
                     alertDialog.show()
                 }
                 Network.Status.REQUIRE_UPDATE -> {
-                    mainStatusTextview.text = "업데이트 중입니다."
+                    mainStatusTextview.text = getString(R.string.status_updating)
                     mainStatusProgressBar.isVisible = true
                     val alertDialog: AlertDialog = context.let {
                         val builder = AlertDialog.Builder(it)
-                        builder.setTitle("업데이트가 있습니다.")
-                        builder.setMessage("업데이트 할까요?")
+                        builder.setTitle(getString(R.string.action_found_to_update_title))
+                        builder.setMessage(getString(R.string.action_found_to_update_title))
                         builder.apply {
-                            setPositiveButton("하기",
+                            setPositiveButton(getString(R.string.do_it),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     mainStatusTextviewCancelButton.isVisible = true
                                     versionController.update()
                                 })
-                            setNegativeButton("하지 않기",
+                            setNegativeButton(getString(R.string.do_not_it),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     System.runFinalization()
                                     exitProcess(0)
                                 })
-                            setNeutralButton("나중에 하기",
+                            setNeutralButton(getString(R.string.afterward_do_it),
                                 DialogInterface.OnClickListener { dialog, which ->
                                     versionController.jsonToData()
                                     startActivity(
@@ -125,27 +125,27 @@ class MainActivity : AppCompatActivity() {
                     alertDialog.show()
                 }
                 Network.Status.NOT_REQUIRE_UPDATE -> {
-                    mainStatusTextview.text = "업데이트가 필요 없어요"
+                    mainStatusTextview.text = getString(R.string.status_not_require_update)
                     versionController.jsonToData()
                     finishUpdate()
                 }
                 Network.Status.FAIL_CONNECT_TO_SERVER -> {
                     val alertDialog: AlertDialog = context.let {
                         val builder = AlertDialog.Builder(it)
-                        builder.setTitle("업데이트 서버와 연결하지 못했습니다.")
-                        builder.setMessage("다시 시도할까요?")
+                        builder.setTitle(R.string.action_failure_connect_to_server_title)
+                        builder.setMessage(R.string.action_failure_connect_to_server_message)
                         builder.setCancelable(false)
                         builder.apply {
-                            setPositiveButton("다시 시도",
+                            setPositiveButton(getString(R.string.retry),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     versionController.retryUpdate()
                                 })
-                            setNegativeButton("종료",
+                            setNegativeButton(getString(R.string.exit),
                                 DialogInterface.OnClickListener { dialog, id ->
                                     System.runFinalization()
                                     exitProcess(0)
                                 })
-                            setNeutralButton("나중에 하기",
+                            setNeutralButton(getString(R.string.afterward_do_it),
                                 DialogInterface.OnClickListener { dialog, which ->
                                     versionController.jsonToData()
                                     startActivity(
@@ -201,15 +201,15 @@ class MainActivity : AppCompatActivity() {
     fun onCancelButtonClick(v: View) {
         val alertDialog: AlertDialog = this.let {
             val builder = AlertDialog.Builder(it)
-            builder.setTitle("업데이트를 취소할까요?")
+            builder.setTitle(getString(R.string.action_cancel_update_title))
             builder.setCancelable(false)
             builder.apply {
-                setPositiveButton("취소할래",
+                setPositiveButton(getString(R.string.do_not_it),
                     DialogInterface.OnClickListener { dialog, id ->
                         System.runFinalization()
                         exitProcess(0)
                     })
-                setNegativeButton("잘못 눌렀어",
+                setNegativeButton(getString(R.string.do_it),
                     DialogInterface.OnClickListener { dialog, id ->
                     })
             }
@@ -229,7 +229,7 @@ class MainActivity : AppCompatActivity() {
         //'뒤로' 버튼 한번 클릭 시 메시지
         Toast.makeText(
             this,
-            "'${getString(R.string.back)}' 버튼을 한 번 더 누르시면 앱이 종료됩니다.",
+            getString(R.string.action_exit),
             Toast.LENGTH_SHORT
         ).show()
         //lastTimeBackPressed에 '뒤로'버튼이 눌린 시간을 기록

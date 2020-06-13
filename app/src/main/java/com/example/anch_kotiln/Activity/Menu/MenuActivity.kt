@@ -44,7 +44,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     fun onClickUnimplementedFunction(v: View?) {
-        Toast.makeText(this, getString(R.string.unimplemented_function), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.status_unimplemented_function), Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {
@@ -58,7 +58,7 @@ class MenuActivity : AppCompatActivity() {
                 return
             }
             //'뒤로' 버튼 한번 클릭 시 메시지
-            Toast.makeText(this, "'${getString(R.string.back)}' 버튼을 한 번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.action_exit), Toast.LENGTH_SHORT).show()
             //lastTimeBackPressed에 '뒤로'버튼이 눌린 시간을 기록
             lastTimeBackPressed = System.currentTimeMillis()
             return

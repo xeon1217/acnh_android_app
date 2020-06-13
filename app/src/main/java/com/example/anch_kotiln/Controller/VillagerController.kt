@@ -20,7 +20,6 @@ import retrofit2.Response
 class VillagerController : Controller {
     private val TAG = VillagerController::class.java.simpleName
     private val service = Network.instance.create(VillagerService::class.java)
-    private val key = "villager_value"
     private val items = ArrayList<VillagerDTO>()
     private val images = ArrayList<IO.Image>()
     private var finished = false
