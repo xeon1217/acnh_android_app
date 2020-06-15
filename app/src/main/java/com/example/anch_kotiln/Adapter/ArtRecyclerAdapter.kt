@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.anch_kotiln.Model.DTO.ArtDTO
 import com.example.anch_kotiln.R
 import com.example.anch_kotiln.Utility.IO
@@ -42,10 +43,10 @@ class ArtRecyclerAdapter(val context: Context, rawData: ArrayList<ArtDTO>) :
         holder.realArtworkNameTextView.text = filteredData[position].realArtworkName
         holder.artistTextView.text = filteredData[position].artist
         holder.genuineCardView.visibility = View.VISIBLE
-        holder.genuineImageView.setImageBitmap(BitmapFactory.decodeFile("${IO.file.path}/${filteredData[position].imageGenuineResource}"))
+        Glide.with(context).load("${IO.file.path}/${filteredData[position].imageGenuineResource}").into(holder.genuineImageView)
         if(filteredData[position].existFake) {
             holder.fakeCardView.visibility = View.VISIBLE
-            holder.fakeImageView.setImageBitmap(BitmapFactory.decodeFile("${IO.file.path}/${filteredData[position].imageFakeResource}"))
+            Glide.with(context).load("${IO.file.path}/${filteredData[position].imageFakeResource}").into(holder.fakeImageView)
         } else {
             holder.fakeCardView.visibility = View.GONE
         }

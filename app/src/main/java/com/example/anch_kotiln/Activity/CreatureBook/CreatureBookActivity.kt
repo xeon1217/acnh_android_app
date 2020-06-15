@@ -1,13 +1,14 @@
 package com.example.anch_kotiln.Activity.CreatureBook
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anch_kotiln.Activity.Menu.MainActivity
 import com.example.anch_kotiln.Adapter.ItemCategoryRecyclerAdapter
@@ -18,10 +19,11 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlinx.android.synthetic.main.activity_creature_book.*
 
 class CreatureBookActivity : AppCompatActivity() {
+    private val tag = CreatureBookActivity::class.java.simpleName
     private lateinit var realtimeAdapter: ItemCategoryRecyclerAdapter
     private lateinit var insectAdapter: ItemCategoryRecyclerAdapter
     private lateinit var fishAdapter: ItemCategoryRecyclerAdapter
-    private var tabPostion: Int = 0
+    private var tabPosition: Int = 0
 
     //툴바 관련 시작
     private fun initToolbar() {
@@ -36,7 +38,7 @@ class CreatureBookActivity : AppCompatActivity() {
         (menu?.findItem(R.id.app_bar_search)?.actionView as SearchView).setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    when (tabPostion) {
+                    when (tabPosition) {
                         0 -> {
                             realtimeAdapter.ListFilter().filter(query)
                             Toast.makeText(
@@ -66,7 +68,7 @@ class CreatureBookActivity : AppCompatActivity() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    when (tabPostion) {
+                    when (tabPosition) {
                         0 -> realtimeAdapter.ListFilter().filter(newText)
                         1 -> insectAdapter.ListFilter().filter(newText)
                         2 -> fishAdapter.ListFilter().filter(newText)
@@ -117,29 +119,29 @@ class CreatureBookActivity : AppCompatActivity() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) { // 탭이 선택 해제 되었을 때,
-                tabPostion = tab.position
-                when (tabPostion) {
-                    0 -> realtimeRecyclerView.isVisible = false // 실시간 도감
-                    1 -> insectRecyclerView.isVisible = false // 곤충 도감
-                    2 -> fishRecyclerView.isVisible = false // 물고기 도감
+                tabPosition = tab.position
+                when (tabPosition) {
+                    0 -> realtimeRecyclerView.visibility = View.GONE // 실시간 도감
+                    1 -> insectRecyclerView.visibility = View.GONE // 곤충 도감
+                    2 -> fishRecyclerView.visibility = View.GONE // 물고기 도감
                 }
             }
 
             override fun onTabSelected(tab: TabLayout.Tab) { // 탭이 선택 되었을 때,
-                tabPostion = tab.position
+                tabPosition = tab.position
 
-                when (tabPostion) {
+                when (tabPosition) {
                     0 -> { // 실시간 도감
-                        realtimeRecyclerView.isVisible = true
+                        realtimeRecyclerView.visibility = View.VISIBLE
                         creatureBookToolbar.title =
                             "${getString(R.string.title_activity_realtime_book)} (${Common.getCurrentDate()}월, ${Common.getCurrentTimeStr()}시 기준)"
                     }
                     1 -> { // 곤충 도감
-                        insectRecyclerView.isVisible = true
+                        insectRecyclerView.visibility = View.VISIBLE
                         creatureBookToolbar.title = getString(R.string.title_activity_insect_book)
                     }
                     2 -> { // 물고기 도감
-                        fishRecyclerView.isVisible = true
+                        fishRecyclerView.visibility = View.VISIBLE
                         creatureBookToolbar.title = getString(R.string.title_activity_fish_book)
                     }
                 }

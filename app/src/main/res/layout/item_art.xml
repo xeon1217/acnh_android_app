@@ -78,7 +78,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
-                            android:scaleType="centerCrop" />
+                            android:scaleType="fitCenter" />
 
                         <TextView
                             android:id="@+id/artBookGenuineTextView"
@@ -115,7 +115,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:adjustViewBounds="true"
-                            android:scaleType="centerCrop" />
+                            android:scaleType="fitCenter" />
 
                         <TextView
                             android:id="@+id/artBookFakeTextView"

@@ -28,7 +28,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="0.8"
                 android:padding="5dp"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:transitionName="pair_thumb" />
 
             <TextView

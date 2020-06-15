@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.anch_kotiln.Activity.CreatureBook.CreatureBookFishPopupActivity
 import com.example.anch_kotiln.Activity.CreatureBook.CreatureBookInsectPopupActivity
 import com.example.anch_kotiln.Model.DTO.ObjectDTO
@@ -34,7 +35,7 @@ class ItemObjectRecyclerAdapter(val context: Context, rawData: ArrayList<ObjectD
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemImageView.setImageBitmap(BitmapFactory.decodeFile("${IO.file.path}/${filteredData[position].imageIconResource}"))
+        Glide.with(context).load("${IO.file.path}/${filteredData[position].imageIconResource}").into(holder.itemImageView)
         holder.itemNameTextView.text = filteredData[position].name
         holder.itemView.setOnClickListener {
             when (filteredData[position].type) {

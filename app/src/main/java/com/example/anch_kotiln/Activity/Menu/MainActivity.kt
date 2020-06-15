@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             when (status) {
                 Network.Status.FIRST -> {
                     mainStatusTextview.text = getString(R.string.status_updating)
-                    mainStatusProgressBar.isVisible = true
+                    mainStatusProgressBar.visibility = View.VISIBLE
 
                     intent = Intent(context, Dialog::class.java)
                     intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_first_app_start_title))
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 Network.Status.REQUIRE_UPDATE -> {
                     mainStatusTextview.text = getString(R.string.status_updating)
-                    mainStatusProgressBar.isVisible = true
+                    mainStatusProgressBar.visibility = View.VISIBLE
 
                     intent = Intent(context, Dialog::class.java)
                     intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_found_to_update_title))
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                 Network.Status.FIRST.toInt() -> {
                     when (response) {
                         Dialog.Button.POSITIVE.toInt() -> {
-                            mainStatusTextviewCancelButton.isVisible = true
+                            mainStatusTextviewCancelButton.visibility = View.VISIBLE
                             versionController.update()
                         }
                         Dialog.Button.NEGATIVE.toInt() -> exit()
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
                 Network.Status.REQUIRE_UPDATE.toInt() -> {
                     when (response) {
                         Dialog.Button.POSITIVE.toInt() -> {
-                            mainStatusTextviewCancelButton.isVisible = true
+                            mainStatusTextviewCancelButton.visibility = View.VISIBLE
                             versionController.update()
                         }
                         Dialog.Button.NEGATIVE.toInt() -> exit()

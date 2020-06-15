@@ -25,7 +25,7 @@
                 android:layout_weight="0.8"
                 android:background="@drawable/round_menu_background"
                 android:padding="5dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="fitCenter" />
 
             <Space
                 android:layout_width="10dp"

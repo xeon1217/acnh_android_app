@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.anch_kotiln.*
 import com.example.anch_kotiln.Utility.Common
 import com.example.anch_kotiln.Model.DTO.ReactionDTO
 import com.example.anch_kotiln.Utility.IO
 import kotlinx.android.synthetic.main.item_reaction.view.*
-import org.w3c.dom.Text
 
 class ReactionRecyclerAdapter(val context: Context, list: ArrayList<ReactionDTO>) :
     RecyclerView.Adapter<ReactionRecyclerAdapter.ViewHolder>(), Filterable {
@@ -31,11 +30,11 @@ class ReactionRecyclerAdapter(val context: Context, list: ArrayList<ReactionDTO>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.imageView.setImageBitmap(BitmapFactory.decodeFile("${IO.file.path}/${filteredData[position].imageIconResource}"))
+        Glide.with(context).load("${IO.file.path}/${filteredData[position].imageIconResource}").into(holder.imageView)
         holder.nameValueTextView.text = filteredData[position].name
-        holder.soruceValueTextView.text = "\"${filteredData[position].source}\" 성격을 가진 동물이 가르쳐 줌"
+        holder.sourceValueTextView.text = "\"${filteredData[position].source}\" 성격을 가진 동물이 가르쳐 줌"
         if(filteredData[position].sourceNote.isNotEmpty()) {
-            holder.sourceNoteValueTextView.isVisible = true
+            holder.sourceNoteValueTextView.visibility = View.VISIBLE
             holder.sourceNoteValueTextView.text = "단, ${filteredData[position].sourceNote}"
         }
     }
@@ -47,7 +46,7 @@ class ReactionRecyclerAdapter(val context: Context, list: ArrayList<ReactionDTO>
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.reactionImageView
         val nameValueTextView: TextView = itemView.reactionNameTextView
-        val soruceValueTextView: TextView = itemView.reactionSourceTextView
+        val sourceValueTextView: TextView = itemView.reactionSourceTextView
         val sourceNoteValueTextView: TextView = itemView.reactionSourceNoteTextView
     }
 

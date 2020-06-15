@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.anch_kotiln.*
 import com.example.anch_kotiln.Model.DTO.ArtDTO
 import com.example.anch_kotiln.Model.DTO.ModelDTO
