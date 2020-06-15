@@ -5,16 +5,18 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     -->
-    <color name="colorPrimary">#9edfbd</color>
-    <color name="colorPrimaryDark">#87c9a4</color>
-    <color name="colorAccent">#87c9a4</color>
-    <color name="colorBackground">#fffae4</color>
+    <color name="colorPrimary">#b4e3b5</color>
+    <color name="colorPrimaryDark">#b4e3b5</color>
+    <color name="colorAccent">#b4e3b5</color>
+    <color name="colorBackground">#f5f2e3</color>
     <color name="colorMenuBackground">#feed9f</color>
+    <color name="colorButtonBackground">#15c6b6</color>
+    <color name="colorButtonText">#ffffff</color>
+    <color name="colorTextTitle">#4d3906</color>
+    <color name="colorTextMessage">#938666</color>
+    <color name="colorProgress">#00b7d1</color>
 
-    <color name="color_F38392">#F15866</color>
+    <color name="colorSignature">#33a142</color>
+
     <color name="colorPrimaryDeepDark">#206036</color>
-    <color name="colorFont">#86755a</color>
-    <color name="dim50">#86755a</color>
-
-
 </resources>

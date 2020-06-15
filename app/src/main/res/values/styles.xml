@@ -28,6 +28,8 @@
         <item name="android:radioButtonStyle">@style/RadioButtonStyle</item>
         <item name="android:checkboxStyle">@style/CheckboxStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:progressBarStyle">@style/ProgressBar</item>
+        <item name="android:actionBarTheme">@style/ActionBar</item>
 
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
@@ -45,30 +47,49 @@
         <item name="android:radioButtonStyle">@style/RadioButtonStyle</item>
         <item name="android:checkboxStyle">@style/CheckboxStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:progressBarStyle">@style/ProgressBar</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
     </style>
 
     <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">@font/font</item>
-        <item name="android:textColor">@color/colorFont</item>
-    </style>
-
-    <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font</item>
-        <item name="android:textColor">@color/colorFont</item>
+        <item name="android:textColor">@color/colorTextMessage</item>
     </style>
 
     <style name="EditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
         <item name="android:fontFamily">@font/font</item>
-        <item name="android:textColor">@color/colorFont</item>
+        <item name="android:textColor">@color/colorTextMessage</item>
+    </style>
+
+    <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font</item>
+        <item name="android:textColor">@color/colorButtonText</item>
+        <item name="android:background">@drawable/button_background</item>
     </style>
 
     <style name="RadioButtonStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
         <item name="android:fontFamily">@font/font</item>
-        <item name="android:textColor">@color/colorFont</item>
+        <item name="android:textColor">@color/colorTextMessage</item>
     </style>
 
     <style name="CheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
         <item name="android:fontFamily">@font/font</item>
-        <item name="android:textColor">@color/colorFont</item>
+        <item name="android:textColor">@color/colorTextMessage</item>
+    </style>
+
+    <style name="ProgressBar" parent="@android:style/Widget.DeviceDefault.ProgressBar">
+        <item name="android:progressTint">@color/colorProgress</item>
+    </style>
+
+    <style name="ActionBar" parent="@android:style/Widget.DeviceDefault.ActionBar">
+        <item name="android:fontFamily">@font/font</item>
+        <item name="android:textColor">@color/colorTextTitle</item>
+        <item name="android:background">@drawable/round_all_toolbar</item>
     </style>
 </resources>
+
+<!--
+Widget.DeviceDefault.ProgressBar
+Widget.DeviceDefault.ActionBar
+DialogWindowTitle.DeviceDefault
+-->

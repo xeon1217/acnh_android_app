@@ -10,6 +10,7 @@ import com.google.gson.JsonParser
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class VersionController {
     private val tag = VersionController::class.java.simpleName
@@ -25,9 +26,14 @@ class VersionController {
                 IO.ImageDownloader(mCallback).execute(images)
             }
         }
+
+        override fun retry() {
+            images.clear()
+        }
     }
 
     fun retryUpdate() {
+        versionCallback.retry()
         isUpdate(mCallback)
     }
 
@@ -85,6 +91,17 @@ class VersionController {
                 }
 
                 mCallback.updateProgressBar("서버와 연결하는데 성공했습니다.")
+
+                if(IO.preferenceManager.getBoolean(IO.key.exceptionUpdate)) { // 업데이트 중 오류 발견
+                    Log.d(tag, "Found Exception File :: ${IO.preferenceManager.getValue(IO.key.exceptionUpdateData)}")
+                    if(File(IO.preferenceManager.getValue(IO.key.exceptionUpdateData)).exists()) {
+                        File(IO.preferenceManager.getValue(IO.key.exceptionUpdateData)).delete()
+                        IO.preferenceManager.removeValue(IO.key.exceptionUpdate)
+                        IO.preferenceManager.removeValue(IO.key.exceptionUpdateData)
+                        Log.d(tag, "Exception File Delete")
+                    }
+                }
+
                 if (!IO.preferenceManager.getBoolean(IO.key.first)) {
                     mCallback.connect(Network.Status.FIRST) // 최초 기동
                 } else {
@@ -145,7 +162,8 @@ class VersionController {
     private fun setCallback() {
         MainActivity.villagerController.setCallback(versionCallback)
         MainActivity.artController.setCallback(versionCallback)
-        MainActivity.creatureController.setCallback(versionCallback)
+        MainActivity.creatureController.fishController.setCallback(versionCallback)
+        MainActivity.creatureController.insectController.setCallback(versionCallback)
         MainActivity.reactionController.setCallback(versionCallback)
     }
 
@@ -153,8 +171,8 @@ class VersionController {
         when (tableName) {
             "${IO.key.villager}${IO.key.value}" -> MainActivity.villagerController.request()
             "${IO.key.art}${IO.key.value}" -> MainActivity.artController.request()
-            "${IO.key.fish}${IO.key.value}" -> MainActivity.creatureController.requestFish()
-            "${IO.key.insect}${IO.key.value}" -> MainActivity.creatureController.requestInsect()
+            "${IO.key.fish}${IO.key.value}" -> MainActivity.creatureController.fishController.request()
+            "${IO.key.insect}${IO.key.value}" -> MainActivity.creatureController.insectController.request()
             "${IO.key.reaction}${IO.key.value}" -> MainActivity.reactionController.request()
         }
     }
@@ -163,13 +181,14 @@ class VersionController {
         when (tableName) {
             "${IO.key.villager}${IO.key.value}" -> MainActivity.villagerController.jsonToData()
             "${IO.key.art}${IO.key.value}" -> MainActivity.artController.jsonToData()
-            "${IO.key.fish}${IO.key.value}" -> MainActivity.creatureController.jsonToFish()
-            "${IO.key.insect}${IO.key.value}" -> MainActivity.creatureController.jsonToInsect()
+            "${IO.key.fish}${IO.key.value}" -> MainActivity.creatureController.fishController.jsonToData()
+            "${IO.key.insect}${IO.key.value}" -> MainActivity.creatureController.insectController.jsonToData()
             "${IO.key.reaction}${IO.key.value}" -> MainActivity.reactionController.jsonToData()
         }
     }
 
     interface VersionCallback {
         fun successRequest(_images: ArrayList<IO.Image>)
+        fun retry()
     }
 }

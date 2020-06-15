@@ -41,7 +41,9 @@
                     android:id="@+id/villagerListButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/title_activity_villager_list" />
+                    android:background="#00FFFFFF"
+                    android:text="@string/title_activity_villager_list"
+                    android:textColor="@color/colorTextMessage" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -54,7 +56,9 @@
                     android:id="@+id/creatureBookButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/title_activity_creature_book" />
+                    android:background="#00FFFFFF"
+                    android:text="@string/title_activity_creature_book"
+                    android:textColor="@color/colorTextMessage" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -67,7 +71,9 @@
                     android:id="@+id/artBookButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/title_activity_art_book" />
+                    android:background="#00FFFFFF"
+                    android:text="@string/title_activity_art_book"
+                    android:textColor="@color/colorTextMessage" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -80,7 +86,9 @@
                     android:id="@+id/fossilBookButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/title_activity_fossil_book" />
+                    android:background="#00FFFFFF"
+                    android:text="@string/title_activity_fossil_book"
+                    android:textColor="@color/colorTextMessage" />
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -93,7 +101,9 @@
                     android:id="@+id/reactionListButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/title_activity_reaction_list" />
+                    android:background="#00FFFFFF"
+                    android:text="@string/title_activity_reaction_list"
+                    android:textColor="@color/colorTextMessage" />
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>

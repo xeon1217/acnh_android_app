@@ -3,6 +3,7 @@ package com.example.anch_kotiln.Controller
 import android.util.Log
 import com.example.acnh.Model.ReactionVO
 import com.example.anch_kotiln.Activity.Menu.MainActivity
+import com.example.anch_kotiln.Model.DTO.ObjectDTO
 import com.example.anch_kotiln.Model.DTO.ReactionDTO
 import com.example.anch_kotiln.Model.DTO.VillagerDTO
 import com.example.anch_kotiln.Model.VO.VersionVO
@@ -19,10 +20,7 @@ import retrofit2.Response
 class ReactionController() : Controller {
     private val TAG = ReactionController::class.java.simpleName
     private val service = Network.instance.create(ReactionService::class.java)
-    private val key = "reaction_value"
-    private val items = ArrayList<ReactionDTO>()
-    private val images = ArrayList<IO.Image>()
-    private var finished = false
+    private lateinit var items: ArrayList<ReactionDTO>
     lateinit var versionCallback: VersionController.VersionCallback
     override fun setCallback(_callback: VersionController.VersionCallback) {
         versionCallback = _callback
@@ -41,19 +39,20 @@ class ReactionController() : Controller {
             ) {
                 Log.d(TAG, "Request Success!")
                 IO.preferenceManager.setValue("${IO.key.reaction}${IO.key.value}", Network.gson.toJson(response.body()))
-                jsonToData()
-                versionCallback.successRequest(images)
+                versionCallback.successRequest(jsonToData())
             }
         })
     }
 
 
-    override fun jsonToData() {
+    override fun jsonToData(): ArrayList<IO.Image> {
+        val result = ArrayList<ReactionDTO>()
+        val images = ArrayList<IO.Image>()
         val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.key.reaction}${IO.key.value}"))
         if (!jsonElement.isJsonNull) {
             jsonElement.asJsonArray.forEach {
                 var element = Network.gson.fromJson(it, ReactionVO::class.java)
-                items.add(
+                result.add(
                     ReactionDTO(
                         "image/reaction/icon-${element.engName}.png",
                         "${element.korName}",
@@ -64,14 +63,8 @@ class ReactionController() : Controller {
                 images.add(IO.Image("image/reaction", "icon-${element.engName}.png"))
             }
         }
-    }
-
-    override fun getImageNames(): ArrayList<IO.Image> {
+        items = result
         return images
-    }
-
-    override fun isFinished() : Boolean{
-        return finished
     }
 
     fun getItems(): ArrayList<ReactionDTO> {

@@ -205,8 +205,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/round_menu_background"
+            android:background="@drawable/button_background"
             android:onClick="onClickCancelButton"
+
             android:padding="10dp"
             android:text="@string/close" />
 

@@ -21,10 +21,9 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlinx.android.synthetic.main.activity_creature_book.*
 
 class CreatureBookActivity : AppCompatActivity() {
-private var realtimeAdapter: ItemRecyclerAdapter? = null
-    private var insectAdapter: ItemRecyclerAdapter? = null
-    private var fishAdapter: ItemRecyclerAdapter? = null
-
+    private lateinit var realtimeAdapter: ItemRecyclerAdapter
+    private lateinit var insectAdapter: ItemRecyclerAdapter
+    private lateinit var fishAdapter: ItemRecyclerAdapter
     private var tabPostion: Int = 0
 
     //툴바 관련 시작
@@ -42,16 +41,28 @@ private var realtimeAdapter: ItemRecyclerAdapter? = null
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     when (tabPostion) {
                         0 -> {
-                            realtimeAdapter?.ListFilter()?.filter(query)
-                            Toast.makeText(realtimeAdapter?.context, "검색어 : ${query}, ${realtimeAdapter?.getItemSize()}개 검색됨", Toast.LENGTH_SHORT).show()
+                            realtimeAdapter.ListFilter().filter(query)
+                            Toast.makeText(
+                                realtimeAdapter.context,
+                                "검색어 : ${query}, ${realtimeAdapter.getItemSize()}개 검색됨",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         1 -> {
-                            insectAdapter?.ListFilter()?.filter(query)
-                            Toast.makeText(insectAdapter?.context, "검색어 : ${query}, ${insectAdapter?.getItemSize()}개 검색됨", Toast.LENGTH_SHORT).show()
+                            insectAdapter.ListFilter().filter(query)
+                            Toast.makeText(
+                                insectAdapter.context,
+                                "검색어 : ${query}, ${insectAdapter.getItemSize()}개 검색됨",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         2 -> {
-                            fishAdapter?.ListFilter()?.filter(query)
-                            Toast.makeText(fishAdapter?.context, "검색어 : ${query}, ${fishAdapter?.getItemSize()}개 검색됨", Toast.LENGTH_SHORT).show()
+                            fishAdapter.ListFilter().filter(query)
+                            Toast.makeText(
+                                fishAdapter.context,
+                                "검색어 : ${query}, ${fishAdapter.getItemSize()}개 검색됨",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                     return false
@@ -59,9 +70,9 @@ private var realtimeAdapter: ItemRecyclerAdapter? = null
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     when (tabPostion) {
-                        0 -> realtimeAdapter?.ListFilter()?.filter(newText)
-                        1 -> insectAdapter?.ListFilter()?.filter(newText)
-                        2 -> fishAdapter?.ListFilter()?.filter(newText)
+                        0 -> realtimeAdapter.ListFilter().filter(newText)
+                        1 -> insectAdapter.ListFilter().filter(newText)
+                        2 -> fishAdapter.ListFilter().filter(newText)
                     }
                     return false
                 }
@@ -81,19 +92,15 @@ private var realtimeAdapter: ItemRecyclerAdapter? = null
         //각 객체별 어댑터와 bind
         realtimeAdapter = ItemRecyclerAdapter(
             this,
-            MainActivity.creatureController.getRealtimeModel()
+            MainActivity.creatureController.getModel()
         )
         insectAdapter = ItemRecyclerAdapter(
             this,
-            MainActivity.creatureController.getModel(
-                ObjectDTO.Type.INSECT
-            )
+            MainActivity.creatureController.insectController.getModel()
         )
         fishAdapter = ItemRecyclerAdapter(
             this,
-            MainActivity.creatureController.getModel(
-                ObjectDTO.Type.FISH
-            )
+            MainActivity.creatureController.fishController.getModel()
         )
 
         realtimeRecyclerView.adapter = realtimeAdapter
@@ -132,7 +139,7 @@ private var realtimeAdapter: ItemRecyclerAdapter? = null
                         creatureBookToolbar.title = getString(R.string.title_activity_insect_book)
                     }
                     2 -> { // 물고기 도감
-                        fishRecyclerView.isVisible= true
+                        fishRecyclerView.isVisible = true
                         creatureBookToolbar.title = getString(R.string.title_activity_fish_book)
                     }
                 }
@@ -145,8 +152,16 @@ private var realtimeAdapter: ItemRecyclerAdapter? = null
         setContentView(R.layout.activity_creature_book)
 
         //creatureDateSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, resources.getStringArray(R.array.date_array))
-        creatureDateSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, resources.getStringArray(R.array.date_array))
-        creatureTimeSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, resources.getStringArray(R.array.time_array))
+        creatureDateSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            resources.getStringArray(R.array.date_array)
+        )
+        creatureTimeSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            resources.getStringArray(R.array.time_array)
+        )
         initToolbar()
         bind()
     }

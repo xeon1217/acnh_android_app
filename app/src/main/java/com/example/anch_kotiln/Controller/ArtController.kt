@@ -3,6 +3,7 @@ package com.example.anch_kotiln.Controller
 import android.util.Log
 import com.example.anch_kotiln.Activity.Menu.MainActivity
 import com.example.anch_kotiln.Model.DTO.ArtDTO
+import com.example.anch_kotiln.Model.DTO.ObjectDTO
 import com.example.anch_kotiln.Utility.Network
 import com.example.anch_kotiln.Service.ArtService
 import com.example.anch_kotiln.Model.VO.ArtVO
@@ -15,13 +16,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ArtController() : Controller {
+class ArtController : Controller {
     private val TAG = ArtController::class.java.simpleName
     private val service = Network.instance.create(ArtService::class.java)
-    private val key = "art_value"
-    private val items = ArrayList<ArtDTO>()
-    private val images = ArrayList<IO.Image>()
-    private var finished = false
+    private lateinit var items: ArrayList<ArtDTO>
     lateinit var versionCallback: VersionController.VersionCallback
     override fun setCallback(_callback: VersionController.VersionCallback) {
         versionCallback = _callback
@@ -40,13 +38,14 @@ class ArtController() : Controller {
             ) {
                 Log.d(TAG, "Request Success!")
                 IO.preferenceManager.setValue("${IO.key.art}${IO.key.value}", Network.gson.toJson(response.body()))
-                jsonToData()
-                versionCallback.successRequest(images)
+                versionCallback.successRequest(jsonToData())
             }
         })
     }
 
-    override fun jsonToData() {
+    override fun jsonToData(): ArrayList<IO.Image> {
+        val result = ArrayList<ArtDTO>()
+        val images = ArrayList<IO.Image>()
         val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.key.art}${IO.key.value}"))
         if (!jsonElement.isJsonNull) {
             jsonElement.asJsonArray.forEach {
@@ -61,23 +60,16 @@ class ArtController() : Controller {
                     element.size,
                     element.existFake
                 )
-                items.add(dto)
+                result.add(dto)
                 images.add(IO.Image("image/art", "${element.engName}.png"))
                 if (dto.existFake) {
                     images.add(IO.Image("image/art", "${element.engName}-fake.png"))
                 }
             }
         }
-    }
-
-    override fun getImageNames(): ArrayList<IO.Image> {
+        items = result
         return images
     }
-
-    override fun isFinished(): Boolean {
-        return finished
-    }
-
 
     fun getModel() {
 

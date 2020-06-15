@@ -4,17 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".Activity.Menu.MainActivity">
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:background="@drawable/dialog_background"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="vertical"
-        android:padding="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -39,8 +38,8 @@
         <ProgressBar
             android:id="@+id/mainStatusProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="240dp"
+            android:layout_height="4dp"
             android:layout_weight="1"
             android:visibility="gone" />
 
@@ -51,10 +50,9 @@
 
         <Button
             android:id="@+id/mainStatusTextviewCancelButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/round_menu_background"
             android:onClick="onCancelButtonClick"
             android:text="@string/cancel"
             android:visibility="gone" />

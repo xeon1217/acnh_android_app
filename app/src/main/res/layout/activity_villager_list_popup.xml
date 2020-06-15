@@ -10,10 +10,8 @@
         android:id="@+id/villagerListPopupToolbar"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:background="@drawable/round_all_toolbar"
         android:gravity="center_horizontal"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:theme="@style/ActionBar"
         app:titleTextColor="#606060" />
 
     <LinearLayout
@@ -228,7 +226,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/round_menu_background"
             android:onClick="onClickCancelButton"
             android:text="@string/close" />
 
