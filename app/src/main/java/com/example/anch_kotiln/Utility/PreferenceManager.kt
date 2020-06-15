@@ -13,19 +13,19 @@ class PreferenceManager(val context: Context): Throwable() {
     fun setValue(key: String, value: String) {
         val editor = getPreferences().edit()
         editor.putString(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     fun setVersion(key: String, value: Long) {
         val editor = getPreferences().edit()
         editor.putLong(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     fun setBoolean(key: String, value: Boolean) {
         val editor = getPreferences().edit()
         editor.putBoolean(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     fun getValue(key: String) : String? {
@@ -43,7 +43,7 @@ class PreferenceManager(val context: Context): Throwable() {
     fun removeValue(key: String) {
         var editor = getPreferences().edit()
         editor.remove(key)
-        editor.apply()
+        editor.commit()
     }
 }
 

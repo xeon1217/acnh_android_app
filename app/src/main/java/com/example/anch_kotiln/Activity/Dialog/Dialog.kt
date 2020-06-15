@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
@@ -14,14 +15,11 @@ import kotlinx.android.synthetic.main.dialog.*
 class Dialog : AppCompatActivity(), DialogInterface {
     private val tag = Dialog::class.java.simpleName
 
-    enum class Button(private val type: Int) {
-        NULL(-1),
-        POSITIVE(0),
-        NEGATIVE(1),
-        NEUTRAL(2);
-        fun toInt(): Int {
-            return type
-        }
+    enum class Button {
+        NULL,
+        POSITIVE,
+        NEGATIVE,
+        NEUTRAL;
     }
 
     enum class Text(val value: String){
@@ -72,7 +70,7 @@ class Dialog : AppCompatActivity(), DialogInterface {
             positiveButton.text = text
             positiveButton.setOnClickListener {
                 var intent = Intent()
-                intent.putExtra(Text.RESPONSE.toString(), Button.POSITIVE.toInt())
+                intent.putExtra(Text.RESPONSE.toString(), Button.POSITIVE.ordinal)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -88,7 +86,7 @@ class Dialog : AppCompatActivity(), DialogInterface {
             negativeButton.visibility = View.VISIBLE
             negativeButtonSpace.visibility = View.VISIBLE
             negativeButton.setOnClickListener {
-                intent.putExtra(Text.RESPONSE.toString(), Button.NEGATIVE.toInt())
+                intent.putExtra(Text.RESPONSE.toString(), Button.NEGATIVE.ordinal)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -105,7 +103,7 @@ class Dialog : AppCompatActivity(), DialogInterface {
             neutralButtonSpace.visibility = View.VISIBLE
             neutralButtonLayout.visibility = View.VISIBLE
             neutralButton.setOnClickListener {
-                intent.putExtra(Text.RESPONSE.toString(), Button.NEUTRAL.toInt())
+                intent.putExtra(Text.RESPONSE.toString(), Button.NEUTRAL.ordinal)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -114,5 +112,16 @@ class Dialog : AppCompatActivity(), DialogInterface {
             neutralButtonSpace.visibility = View.GONE
             neutralButtonLayout.visibility = View.GONE
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if(event?.action == MotionEvent.ACTION_OUTSIDE) {
+            return false
+        }
+        return true
+    }
+
+    override fun onBackPressed() {
+        return
     }
 }

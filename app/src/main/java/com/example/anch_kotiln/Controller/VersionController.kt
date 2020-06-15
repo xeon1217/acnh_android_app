@@ -1,6 +1,8 @@
 package com.example.anch_kotiln.Controller
 
+import android.os.AsyncTask
 import android.util.Log
+import com.example.anch_kotiln.Activity.Dialog.Dialog
 import com.example.anch_kotiln.Activity.Menu.MainActivity
 import com.example.anch_kotiln.Model.VO.VersionVO
 import com.example.anch_kotiln.Service.VersionService
@@ -12,19 +14,26 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
-class VersionController {
+class VersionController(val mCallback: MainActivity.Callback ) {
     private val tag = VersionController::class.java.simpleName
     private val service = Network.instance.create(VersionService::class.java)
     private var foundUpdate = 0
-    lateinit var mCallback: MainActivity.Callback
+    var imageDownloader: IO.ImageDownloader = IO.ImageDownloader(mCallback)
     private val versionCallback: VersionCallback = object : VersionCallback {
         private var finish = 0
         private val images = ArrayList<IO.Image>()
         override fun successRequest(_images: ArrayList<IO.Image>) {
             images.addAll(_images)
             if (foundUpdate == ++finish) {
-                IO.ImageDownloader(mCallback).execute(images)
+                if(imageDownloader.status != AsyncTask.Status.RUNNING) {
+                    imageDownloader = IO.ImageDownloader(mCallback)
+                    imageDownloader.execute(images)
+                }
             }
+        }
+
+        override fun failureRequest() {
+            retryUpdate()
         }
 
         override fun retry() {
@@ -34,11 +43,10 @@ class VersionController {
 
     fun retryUpdate() {
         versionCallback.retry()
-        isUpdate(mCallback)
+        isUpdate()
     }
 
-    fun isUpdate(_callback: MainActivity.Callback) {
-        mCallback = _callback
+    fun isUpdate() {
         setCallback()
         service.getAllVersions().enqueue(object : Callback<List<VersionVO>> {
             override fun onFailure(call: Call<List<VersionVO>>, t: Throwable) { //연결 실패
@@ -92,14 +100,17 @@ class VersionController {
 
                 mCallback.updateProgressBar("서버와 연결하는데 성공했습니다.")
 
-                if(IO.preferenceManager.getBoolean(IO.Key.EXCEPTION_UPDATE.toString())) { // 업데이트 중 오류 발견
+                /*
+                preferenceManager.setBoolean(Key.EXCEPTION_UPDATE.toString(), true)
+                preferenceManager.setValue(Key.EXCEPTION_UPDATE_DATA.toString(), "$imagePath")
+
+                 */
+
+                if(!IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString()).isNullOrEmpty()) {
                     Log.d(tag, "Found Exception File :: ${IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())}")
-                    if(File(IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())).exists()) {
-                        File(IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())).delete()
-                        IO.preferenceManager.removeValue(IO.Key.EXCEPTION_UPDATE.toString())
-                        IO.preferenceManager.removeValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())
-                        Log.d(tag, "Exception File Delete")
-                    }
+                    File(IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())).delete()
+                    IO.preferenceManager.removeValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())
+                    Log.d(tag, "Delete!")
                 }
 
                 if (!IO.preferenceManager.getBoolean(IO.Key.FIRST.toString())) {
@@ -116,15 +127,11 @@ class VersionController {
     }
 
     fun update() {
-        val versionArray =
-            JsonParser().parse(IO.preferenceManager.getValue(IO.Key.VERSION.toString())).asJsonArray
+        val versionArray = JsonParser().parse(IO.preferenceManager.getValue(IO.Key.VERSION.toString())).asJsonArray
         if (!versionArray.isJsonNull) {
             versionArray.forEach {
                 var vo = Network.gson.fromJson(it, VersionVO::class.java)
-                if ((IO.preferenceManager.getVersion(vo.tableName) != vo.version) or (!IO.preferenceManager.getBoolean(
-                        "${vo.tableName}${IO.Key.FINISH_UPDATE}"
-                    ))
-                ) {
+                if ((IO.preferenceManager.getVersion(vo.tableName) != vo.version) or (!IO.preferenceManager.getBoolean("${vo.tableName}${IO.Key.FINISH_UPDATE}"))) {
                     Log.d(tag, vo.tableName)
                     requireUpdate("${vo.tableName}${IO.Key.VALUE}")
                 } else {
@@ -189,6 +196,7 @@ class VersionController {
 
     interface VersionCallback {
         fun successRequest(_images: ArrayList<IO.Image>)
+        fun failureRequest()
         fun retry()
     }
 }

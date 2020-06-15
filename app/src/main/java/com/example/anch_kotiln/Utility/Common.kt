@@ -1,11 +1,19 @@
 package com.example.anch_kotiln.Utility
 
+import android.os.AsyncTask
+import androidx.core.app.ActivityCompat.finishAffinity
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.system.exitProcess
 
 class Common {
     companion object {
         val soundSearcher = SoundSearcher()
+
+        fun exit() {
+            System.runFinalization()
+            exitProcess(0)
+        }
 
         fun getCurrentTime(): Int {
             val currentTime =
@@ -134,6 +142,7 @@ class Common {
             return Pair(inputDataArr, outputProcessData)
         }
     }
+
     class SoundSearcher { //출처: https://jhb.kr/122 [JHB의 삽질 이야기]
         private val HANGUL_BEGIN_UNICODE: Char = 44032.toChar()
         private val HANGUL_LAST_UNICODE: Char = 55203.toChar()

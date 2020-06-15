@@ -3,6 +3,7 @@ package com.example.anch_kotiln.Activity.Menu
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.core.view.isVisible
 import com.example.anch_kotiln.Activity.Dialog.Dialog
 import com.example.anch_kotiln.Controller.*
 import com.example.anch_kotiln.R
+import com.example.anch_kotiln.Utility.Common
 import com.example.anch_kotiln.Utility.Network
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
@@ -22,10 +24,8 @@ import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
     private val tag = MainActivity::class.java.simpleName
-    private var lastTimeBackPressed: Long = 0
 
     companion object {
-        val versionController = VersionController()
         val villagerController = VillagerController()
         val creatureController = CreatureController()
         val reactionController = ReactionController()
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_first_app_start_message))
                     intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.receive_it))
                     intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.receive_not_it))
-                    startActivityForResult(intent, Network.Status.FIRST.toInt())
+                    startActivityForResult(intent, Network.Status.FIRST.ordinal)
                 }
                 Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER -> {
                     mainStatusTextview.text = getString(R.string.status_failure_connect_to_server)
@@ -61,10 +61,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_failure_connect_to_server_message))
                     intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.retry))
                     intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.do_not_it))
-                    startActivityForResult(
-                        intent,
-                        Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.toInt()
-                    )
+                    startActivityForResult(intent, Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.ordinal)
                 }
                 Network.Status.REQUIRE_UPDATE -> {
                     mainStatusTextview.text = getString(R.string.status_updating)
@@ -76,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.do_it))
                     intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.do_not_it))
                     intent.putExtra(Dialog.Text.NEUTRAL.toString(), getString(R.string.afterward_do_it))
-                    startActivityForResult(intent, Network.Status.REQUIRE_UPDATE.toInt())
+                    startActivityForResult(intent, Network.Status.REQUIRE_UPDATE.ordinal)
                 }
                 Network.Status.NOT_REQUIRE_UPDATE -> {
                     mainStatusTextview.text = getString(R.string.status_not_require_update)
@@ -92,14 +89,18 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.retry))
                     intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.exit))
                     intent.putExtra(Dialog.Text.NEUTRAL.toString(), getString(R.string.afterward_do_it))
-                    startActivityForResult(intent, Network.Status.FAIL_CONNECT_TO_SERVER.toInt())
+                    startActivityForResult(intent, Network.Status.FAIL_CONNECT_TO_SERVER.ordinal)
                 }
                 Network.Status.SUCCESS_CONNECT_TO_SERVER -> {
                 }
                 Network.Status.SUCCESS_UPDATE -> {
                     mainStatusTextviewCancelButton.text = getString(R.string.confirm)
+                    finishUpdate()
                 }
                 Network.Status.CANCELED_UPDATE -> {
+                    Log.d(tag, "CANCELED_UPDATE")
+                    finishAffinity()
+                    Common.exit()
                 }
                 Network.Status.ERROR_CANCELED_UPDATE -> {
                     mainStatusTextview.text = getString(R.string.status_failure_connect_to_server)
@@ -109,7 +110,16 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_error_cancel_update_message))
                     intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.retry))
                     intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.exit))
-                    startActivityForResult(intent, Network.Status.ERROR_CANCELED_UPDATE.toInt())
+                    startActivityForResult(intent, Network.Status.ERROR_CANCELED_UPDATE.ordinal)
+                }
+                Network.Status.FAIL_CONNECT_COUNT_MAX -> {
+                    mainStatusTextview.text = getString(R.string.status_failure_connect_to_server)
+                    
+                    intent = Intent(context, Dialog::class.java)
+                    intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_failure_connect_count_max_title))
+                    intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_failure_connect_count_max_message))
+                    intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.confirm))
+                    startActivityForResult(intent, Network.Status.FAIL_CONNECT_COUNT_MAX.ordinal)
                 }
             }
         }
@@ -122,6 +132,10 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        override fun failureUpdate() {
+
+        }
+
         override fun updateProgressBar(_progress: Int) {
             mainStatusProgressBar.progress = _progress
         }
@@ -130,44 +144,47 @@ class MainActivity : AppCompatActivity() {
             mainStatusTextview.text = _text
         }
     }
+    private val versionController = VersionController(callback)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var response = data?.getIntExtra(Dialog.Text.RESPONSE.toString(), Dialog.Button.NULL.toInt())
+        var response = data?.getIntExtra(Dialog.Text.RESPONSE.toString(), Dialog.Button.NULL.ordinal)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 99 -> { // onCancelButtonClick, 업데이트 중 취소 버튼
                     when (response) {
-                        Dialog.Button.POSITIVE.toInt() -> exit()
+                        Dialog.Button.POSITIVE.ordinal -> {
+                            versionController.imageDownloader.cancel(false)
+                        }
                     }
                 }
-                Network.Status.FIRST.toInt() -> {
+                Network.Status.FIRST.ordinal -> {
                     when (response) {
-                        Dialog.Button.POSITIVE.toInt() -> {
+                        Dialog.Button.POSITIVE.ordinal -> {
                             mainStatusTextviewCancelButton.visibility = View.VISIBLE
                             versionController.update()
                         }
-                        Dialog.Button.NEGATIVE.toInt() -> exit()
+                        Dialog.Button.NEGATIVE.ordinal -> Common.exit()
                     }
                 }
-                Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.toInt() -> {
+                Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.ordinal -> {
                     when (response) {
-                        Dialog.Button.POSITIVE.toInt() -> {
+                        Dialog.Button.POSITIVE.ordinal -> {
                             mainStatusTextview.text =
                                 getString(R.string.status_connecting_to_server)
                             versionController.retryUpdate()
                         }
-                        Dialog.Button.NEGATIVE.toInt() -> exit()
+                        Dialog.Button.NEGATIVE.ordinal -> Common.exit()
                     }
                 }
-                Network.Status.REQUIRE_UPDATE.toInt() -> {
+                Network.Status.REQUIRE_UPDATE.ordinal -> {
                     when (response) {
-                        Dialog.Button.POSITIVE.toInt() -> {
+                        Dialog.Button.POSITIVE.ordinal -> {
                             mainStatusTextviewCancelButton.visibility = View.VISIBLE
                             versionController.update()
                         }
-                        Dialog.Button.NEGATIVE.toInt() -> exit()
-                        Dialog.Button.NEUTRAL.toInt() -> {
+                        Dialog.Button.NEGATIVE.ordinal -> Common.exit()
+                        Dialog.Button.NEUTRAL.ordinal -> {
                             versionController.jsonToData()
                             startActivity(
                                 Intent(
@@ -179,15 +196,15 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                Network.Status.FAIL_CONNECT_TO_SERVER.toInt() -> {
+                Network.Status.FAIL_CONNECT_TO_SERVER.ordinal -> {
                     when (response) {
-                        Dialog.Button.POSITIVE.toInt() -> {
+                        Dialog.Button.POSITIVE.ordinal -> {
                             mainStatusTextview.text =
                                 getString(R.string.status_connecting_to_server)
                             versionController.retryUpdate()
                         }
-                        Dialog.Button.NEGATIVE.toInt() -> exit()
-                        Dialog.Button.NEUTRAL.toInt() -> {
+                        Dialog.Button.NEGATIVE.ordinal -> Common.exit()
+                        Dialog.Button.NEUTRAL.ordinal -> {
                             versionController.jsonToData()
                             startActivity(
                                 Intent(
@@ -199,14 +216,19 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                Network.Status.ERROR_CANCELED_UPDATE.toInt() -> {
+                Network.Status.ERROR_CANCELED_UPDATE.ordinal -> {
                     when (response) {
-                        Dialog.Button.POSITIVE.toInt() -> {
+                        Dialog.Button.POSITIVE.ordinal -> {
                             mainStatusTextview.text =
                                 getString(R.string.status_connecting_to_server)
                             versionController.retryUpdate()
                         }
-                        Dialog.Button.NEGATIVE.toInt() -> exit()
+                        Dialog.Button.NEGATIVE.ordinal -> Common.exit()
+                    }
+                }
+                Network.Status.FAIL_CONNECT_COUNT_MAX.ordinal -> {
+                    when (response) {
+                        Dialog.Button.POSITIVE.ordinal -> Common.exit()
                     }
                 }
             }
@@ -214,21 +236,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
-            finishAffinity()
-            System.runFinalization()
-            exitProcess(0)
-            return
-        }
-        //'뒤로' 버튼 한번 클릭 시 메시지
-        Toast.makeText(
-            this,
-            getString(R.string.action_exit),
-            Toast.LENGTH_SHORT
-        ).show()
-        //lastTimeBackPressed에 '뒤로'버튼이 눌린 시간을 기록
-        lastTimeBackPressed = System.currentTimeMillis()
+        onCancelButtonClick(View(this))
         return
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(versionController.imageDownloader.status == AsyncTask.Status.RUNNING) {
+            versionController.imageDownloader.cancel(true)
+        }
+        Log.d(tag, "destory!")
     }
 
     fun onCancelButtonClick(v: View) {
@@ -239,17 +256,12 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent, 99)
     }
 
-    private fun exit() {
-        System.runFinalization()
-        exitProcess(0)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         callback.setContext(this)
-        versionController.isUpdate(callback)
+        versionController.isUpdate()
 
         Log.d(tag, "onCreate!")
     }
@@ -258,6 +270,7 @@ class MainActivity : AppCompatActivity() {
         fun setContext(_context: Context)
         fun connect(status: Network.Status)
         fun finishUpdate()
+        fun failureUpdate()
         fun updateProgressBar(_progress: Int)
         fun updateProgressBar(_text: String)
     }

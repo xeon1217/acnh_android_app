@@ -31,6 +31,8 @@ class ArtController : Controller {
             override fun onFailure(call: Call<List<ArtVO>>, t: Throwable) {
                 Log.d(TAG, "Request Fail!")
                 Log.d(TAG, "message : ${t.message}")
+                Thread.sleep(1000)
+                request()
             }
 
             override fun onResponse(

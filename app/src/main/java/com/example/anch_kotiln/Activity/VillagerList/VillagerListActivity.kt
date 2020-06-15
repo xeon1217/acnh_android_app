@@ -64,3 +64,5 @@ class VillagerListActivity : AppCompatActivity() {
         bind()
     }
 }
+
+//스크롤바 구현 필

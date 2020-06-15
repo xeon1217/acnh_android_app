@@ -28,6 +28,8 @@ class InsectController : Controller {
             override fun onFailure(call: Call<List<InsectVO>>, t: Throwable) {
                 Log.d(tag, "Request Fail!")
                 Log.d(tag, "message : ${t.message}")
+                Thread.sleep(1000)
+                request()
             }
 
             override fun onResponse(

@@ -39,6 +39,8 @@
     <string name="action_first_app_start_message">업데이트 서버에서 자료를 받아와야 합니다.\n자료를 받아올까요?</string>
     <string name="action_success_connect_to_server_title">업데이트 서버에 연결하는데 성공했습니다.</string>
     <string name="action_failure_connect_to_server_title">업데이트 서버와 연결하는데 실패했습니다.</string>
+    <string name="action_failure_connect_count_max_title">업데이트 서버와 연결하는데 실패했습니다.</string>
+    <string name="action_failure_connect_count_max_message">인터넷 상태가 좋지 않은 것 같아요,\n나중에 다시 시도해주세요.</string>
     <string name="action_failure_connect_to_server_message">연결하기 위해 다시 시도할까요?</string>
     <string name="action_found_to_update_title">업데이트가 있습니다.</string>
     <string name="action_found_to_update_message">업데이트할까요?</string>

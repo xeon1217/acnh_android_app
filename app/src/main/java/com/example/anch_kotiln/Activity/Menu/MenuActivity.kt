@@ -13,20 +13,22 @@ import com.example.anch_kotiln.Activity.FossilBook.FossilBookActivity
 import com.example.anch_kotiln.Activity.ReactionList.ReactionListActivity
 import com.example.anch_kotiln.Activity.VillagerList.VillagerListActivity
 import com.example.anch_kotiln.R
+import com.example.anch_kotiln.Utility.Common
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.drawer_menu.*
+import kotlin.system.exitProcess
 
 class MenuActivity : AppCompatActivity() {
     private var lastTimeBackPressed: Long = 0
     private val TAG = MenuActivity::class.java.simpleName
 
-    fun initToolbar() {
+    private fun initToolbar() {
         setSupportActionBar(menuToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp) // 홈버튼 이미지 변경
     }
 
-    fun initNavigation() {
+    private fun initNavigation() {
         drawerNavigationView.setNavigationItemSelectedListener { mItem ->
             when (mItem.itemId) {
                 R.id.villagerList -> onCreateVillagerListActivity()
@@ -43,7 +45,7 @@ class MenuActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun onClickUnimplementedFunction(v: View?) {
+    private fun onClickUnimplementedFunction(v: View?) {
         Toast.makeText(this, getString(R.string.status_unimplemented_function), Toast.LENGTH_SHORT).show()
     }
 
@@ -53,8 +55,7 @@ class MenuActivity : AppCompatActivity() {
         } else {
             if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
                 finishAffinity()
-                System.runFinalization()
-                System.exit(0)
+                Common.exit()
                 return
             }
             //'뒤로' 버튼 한번 클릭 시 메시지

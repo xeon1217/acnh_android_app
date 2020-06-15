@@ -28,6 +28,8 @@ class FishController : Controller {
             override fun onFailure(call: Call<List<FishVO>>, t: Throwable) {
                 Log.d(tag, "Request Fail!")
                 Log.d(tag, "message : ${t.message}")
+                Thread.sleep(1000)
+                request()
             }
 
             override fun onResponse(call: Call<List<FishVO>>, response: Response<List<FishVO>>) {

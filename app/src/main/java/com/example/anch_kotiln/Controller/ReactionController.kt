@@ -31,6 +31,8 @@ class ReactionController() : Controller {
             override fun onFailure(call: Call<List<ReactionVO>>, t: Throwable) {
                 Log.d(TAG, "Request Fail!")
                 Log.d(TAG, "message : ${t.message}")
+                Thread.sleep(1000)
+                request()
             }
 
             override fun onResponse(

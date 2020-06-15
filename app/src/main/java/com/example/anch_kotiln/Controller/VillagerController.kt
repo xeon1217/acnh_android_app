@@ -31,6 +31,8 @@ class VillagerController : Controller {
             override fun onFailure(call: Call<List<VillagerVO>>, t: Throwable) {
                 Log.d(TAG, "Request Fail!")
                 Log.d(TAG, "message : ${t.message}")
+                Thread.sleep(1000)
+                request()
             }
 
             override fun onResponse(call: Call<List<VillagerVO>>, response: Response<List<VillagerVO>>) {
