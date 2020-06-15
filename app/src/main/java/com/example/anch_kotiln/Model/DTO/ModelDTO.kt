@@ -16,7 +16,13 @@ class ModelDTO (_data: ArrayList<ObjectDTO>) {
         if(mData.size > 0) {
             when(mData[0].type) {
                 ObjectDTO.Type.VILLAGER -> title = (mData[0] as VillagerDTO).species.toString()
-                //DataObject.Type.ART -> title = (mData[0] as DataArt).tag.toString()
+                ObjectDTO.Type.ART -> {
+                    title = if((mData[0] as ArtDTO).existFake) {
+                        "가품이 존재하는 미술품"
+                    } else {
+                        "진품만 존재하는 미술품"
+                    }
+                }
                 ObjectDTO.Type.FOSSIL -> title = (mData[0] as FossilDTO).tag.toString()
                 ObjectDTO.Type.FISH -> title = (mData[0] as FishDTO).tag.toString()
                 ObjectDTO.Type.INSECT -> title = (mData[0] as InsectDTO).tag.toString()

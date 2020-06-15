@@ -8,12 +8,13 @@ import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.anch_kotiln.*
+import com.example.anch_kotiln.Model.DTO.ArtDTO
 import com.example.anch_kotiln.Model.DTO.ModelDTO
+import com.example.anch_kotiln.Model.DTO.ObjectDTO
 import kotlinx.android.synthetic.main.item_category.view.*
 
-class ItemRecyclerAdapter(val context: Context, list: ArrayList<ModelDTO>) :
-    RecyclerView.Adapter<ItemRecyclerAdapter.ViewHolder>(), Filterable {
-    private val rawData: ArrayList<ModelDTO> = list
+class ItemCategoryRecyclerAdapter(val context: Context, val rawData: ArrayList<ModelDTO>, private val spanCount: Int) :
+    RecyclerView.Adapter<ItemCategoryRecyclerAdapter.ViewHolder>(), Filterable {
     private var filteredData: ArrayList<ModelDTO> = rawData
     private var filter: ListFilter = ListFilter()
 
@@ -26,6 +27,10 @@ class ItemRecyclerAdapter(val context: Context, list: ArrayList<ModelDTO>) :
         return filteredData.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     fun getItemSize(): Int {
         var size = 0
         filteredData.forEach {
@@ -35,23 +40,29 @@ class ItemRecyclerAdapter(val context: Context, list: ArrayList<ModelDTO>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemCategoryTextView.text = filteredData[position].title
-        holder.itemListRecyclerView.layoutManager = GridLayoutManager(context, 5)
-        holder.itemListRecyclerView.adapter = CategoryRecyclerAdapter(context, filteredData[position].mData)
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val itemCategoryTextView: TextView = itemView.itemCategoryTextView
-        val itemListRecyclerView: RecyclerView = itemView.itemCategoryRecyclerView
+        if (filteredData[position].mData[0].type == ObjectDTO.Type.ART) {
+            holder.itemCategoryTextView.text = filteredData[position].title
+            holder.itemListRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
+            holder.itemListRecyclerView.adapter = ArtRecyclerAdapter(context, filteredData[position].mData as ArrayList<ArtDTO>)
+        } else {
+            holder.itemCategoryTextView.text = filteredData[position].title
+            holder.itemListRecyclerView.layoutManager = GridLayoutManager(context, spanCount)
+            holder.itemListRecyclerView.adapter = ItemObjectRecyclerAdapter(context, filteredData[position].mData)
+        }
     }
 
     override fun getFilter(): ListFilter {
         return filter
     }
 
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val itemCategoryTextView: TextView = itemView.itemCategoryTextView
+        val itemListRecyclerView: RecyclerView = itemView.itemCategoryRecyclerView
+    }
+
     inner class ListFilter() : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            var result: FilterResults = FilterResults()
+            var result = FilterResults()
             var filterList: ArrayList<ModelDTO> = ArrayList()
 
             if (constraint == null || constraint.isEmpty()) {

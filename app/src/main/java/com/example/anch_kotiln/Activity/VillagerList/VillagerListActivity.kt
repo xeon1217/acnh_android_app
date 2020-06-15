@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anch_kotiln.Activity.Menu.MainActivity
-import com.example.anch_kotiln.Adapter.ItemRecyclerAdapter
+import com.example.anch_kotiln.Adapter.ItemCategoryRecyclerAdapter
 import com.example.anch_kotiln.R
 import kotlinx.android.synthetic.main.activity_villager_list.*
 
 class VillagerListActivity : AppCompatActivity() {
-    val villagerListAdapter = ItemRecyclerAdapter(this, MainActivity.villagerController.getModel())
+    private lateinit var villagerListAdapter: ItemCategoryRecyclerAdapter
 
     //툴바 관련 시작
     private fun initToolbar() {
@@ -49,6 +49,9 @@ class VillagerListActivity : AppCompatActivity() {
     // 툴바 관련 끝
 
     private fun bind() {
+        villagerListAdapter = ItemCategoryRecyclerAdapter(this, MainActivity.villagerController.getModel(), 5)
+        villagerListAdapter.setHasStableIds(true)
+
         villagerListRecyclerView.adapter = villagerListAdapter
         villagerListRecyclerView.layoutManager = LinearLayoutManager(this)
     }

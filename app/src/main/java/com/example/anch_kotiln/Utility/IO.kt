@@ -1,20 +1,12 @@
 package com.example.anch_kotiln.Utility
 
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
-import android.net.Uri
 import android.os.AsyncTask
-import android.os.Handler
 import android.util.Log
-import android.widget.ProgressBar
+import android.widget.ImageView
 import com.example.anch_kotiln.Activity.Menu.MainActivity
-import com.example.anch_kotiln.Adapter.CategoryRecyclerAdapter
-import com.example.anch_kotiln.R
-import retrofit2.http.Url
 import java.io.File
 import java.io.FileOutputStream
 import java.net.ConnectException
@@ -25,13 +17,18 @@ class IO : Application() {
         private val TAG = IO::class.java.simpleName
         lateinit var preferenceManager: PreferenceManager
         lateinit var file: File
-        val key = Key()
     }
 
     override fun onCreate() {
         preferenceManager = PreferenceManager(applicationContext)
         file = filesDir
         super.onCreate()
+    }
+
+    class ImageLoader() : AsyncTask<ImageView, Void, Void>() {
+        override fun doInBackground(vararg params: ImageView): Void? {
+            return null
+        }
     }
 
     class ImageDownloader(var callback: MainActivity.Callback) :
@@ -70,8 +67,8 @@ class IO : Application() {
                 }
             } catch (e: ConnectException) {
                 cancel(true)
-                preferenceManager.setBoolean(key.exceptionUpdate, true)
-                preferenceManager.setValue(key.exceptionUpdateData, "$imagePath")
+                preferenceManager.setBoolean(Key.EXCEPTION_UPDATE.toString(), true)
+                preferenceManager.setValue(Key.EXCEPTION_UPDATE_DATA.toString(), "$imagePath")
                 return -1
             } catch (e: Exception) {
                 Log.d(TAG, "$e")
@@ -117,23 +114,26 @@ class IO : Application() {
         val imageName: String
     )
 
-    class Key {
+    enum class Key(private val key: String) {
         // 테이블 조회 관련 Key
-        val table = "table" // 버전 조회용
-        val value = "value" // 값 조회용
+        table("table"), // 버전 조회용
+        VALUE("value"), // 값 조회용
 
         // 상태 관련 Key
-        val exceptionUpdate = "exception_update" // 업데이트 중 오류 발생
-        val finishUpdate = "finish_update" // 업데이트가 정상적으로 되었는지?
-        val first = "is_first" // 처음으로 앱을 실행했는지?
+        EXCEPTION_UPDATE("exception_update"), // 업데이트 중 오류 발생
+        FINISH_UPDATE("finish_update"), // 업데이트가 정상적으로 되었는지?
+        FIRST("is_first"), // 처음으로 앱을 실행했는지?
 
-        val exceptionUpdateData = "exception_update_data" // 업데이트 중 오류 발생
+        EXCEPTION_UPDATE_DATA("exception_update_data"), // 업데이트 중 오류 발생
         // 테이블 이름 관련 Key
-        var version = "version"
-        var villager = "villager"
-        var fish = "fish"
-        var insect = "insect"
-        var reaction = "reaction"
-        var art = "art"
+        VERSION("version"),
+        VILLAGER("villager"),
+        FISH("fish"),
+        INSECT("insect"),
+        REACTION("reaction"),
+        ART("art");
+        override fun toString(): String {
+            return key
+        }
     }
 }

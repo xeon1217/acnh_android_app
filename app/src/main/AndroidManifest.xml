@@ -18,7 +18,7 @@
         android:theme="@style/MainTheme"
         tools:targetApi="n">
         <activity
-            android:name=".Activity.Dialog.CustomDialog"
+            android:name=".Activity.Dialog.Dialog"
             android:theme="@style/CustomDialogTheme" />
         <activity android:name=".Activity.ArtBook.ArtBookActivity" />
         <activity

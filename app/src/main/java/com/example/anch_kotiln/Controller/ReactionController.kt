@@ -38,17 +38,16 @@ class ReactionController() : Controller {
                 response: Response<List<ReactionVO>>
             ) {
                 Log.d(TAG, "Request Success!")
-                IO.preferenceManager.setValue("${IO.key.reaction}${IO.key.value}", Network.gson.toJson(response.body()))
+                IO.preferenceManager.setValue("${IO.Key.REACTION}${IO.Key.VALUE}", Network.gson.toJson(response.body()))
                 versionCallback.successRequest(jsonToData())
             }
         })
     }
 
-
     override fun jsonToData(): ArrayList<IO.Image> {
         val result = ArrayList<ReactionDTO>()
         val images = ArrayList<IO.Image>()
-        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.key.reaction}${IO.key.value}"))
+        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.Key.REACTION}${IO.Key.VALUE}"))
         if (!jsonElement.isJsonNull) {
             jsonElement.asJsonArray.forEach {
                 var element = Network.gson.fromJson(it, ReactionVO::class.java)

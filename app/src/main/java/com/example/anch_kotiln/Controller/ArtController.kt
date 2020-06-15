@@ -3,6 +3,7 @@ package com.example.anch_kotiln.Controller
 import android.util.Log
 import com.example.anch_kotiln.Activity.Menu.MainActivity
 import com.example.anch_kotiln.Model.DTO.ArtDTO
+import com.example.anch_kotiln.Model.DTO.ModelDTO
 import com.example.anch_kotiln.Model.DTO.ObjectDTO
 import com.example.anch_kotiln.Utility.Network
 import com.example.anch_kotiln.Service.ArtService
@@ -37,7 +38,7 @@ class ArtController : Controller {
                 response: Response<List<ArtVO>>
             ) {
                 Log.d(TAG, "Request Success!")
-                IO.preferenceManager.setValue("${IO.key.art}${IO.key.value}", Network.gson.toJson(response.body()))
+                IO.preferenceManager.setValue("${IO.Key.ART}${IO.Key.VALUE}", Network.gson.toJson(response.body()))
                 versionCallback.successRequest(jsonToData())
             }
         })
@@ -46,7 +47,7 @@ class ArtController : Controller {
     override fun jsonToData(): ArrayList<IO.Image> {
         val result = ArrayList<ArtDTO>()
         val images = ArrayList<IO.Image>()
-        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.key.art}${IO.key.value}"))
+        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.Key.ART}${IO.Key.VALUE}"))
         if (!jsonElement.isJsonNull) {
             jsonElement.asJsonArray.forEach {
                 var element = Network.gson.fromJson(it, ArtVO::class.java)
@@ -56,7 +57,7 @@ class ArtController : Controller {
                     element.korName,
                     element.realArtworkTitle,
                     element.artist,
-                    element.museumDescription,
+                    element.fakeDescription,
                     element.size,
                     element.existFake
                 )
@@ -71,7 +72,20 @@ class ArtController : Controller {
         return images
     }
 
-    fun getModel() {
+    fun getModel(): ArrayList<ModelDTO> {
+        val result: ArrayList<ModelDTO> = ArrayList(0)
+        val existFakeArts: ArrayList<ArtDTO> = ArrayList(0)
+        val noExistFakeArts: ArrayList<ArtDTO> = ArrayList(0)
 
+        items.forEach { dto ->
+            if(dto.existFake) {
+                existFakeArts.add(dto)
+            } else {
+                noExistFakeArts.add(dto)
+            }
+        }
+        result.add(ModelDTO(existFakeArts as ArrayList<ObjectDTO>))
+        result.add(ModelDTO(noExistFakeArts as ArrayList<ObjectDTO>))
+        return result
     }
 }

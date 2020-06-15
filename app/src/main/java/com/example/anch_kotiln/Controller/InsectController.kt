@@ -35,7 +35,7 @@ class InsectController : Controller {
                 response: Response<List<InsectVO>>
             ) {
                 Log.d(tag, "Request Success!")
-                IO.preferenceManager.setValue("${IO.key.insect}${IO.key.value}", Network.gson.toJson(response.body()))
+                IO.preferenceManager.setValue("${IO.Key.INSECT}${IO.Key.VALUE}", Network.gson.toJson(response.body()))
                 versionCallback.successRequest(jsonToData())
             }
         })
@@ -44,7 +44,7 @@ class InsectController : Controller {
     override fun jsonToData(): ArrayList<IO.Image> {
         val result = ArrayList<InsectDTO>()
         val images = ArrayList<IO.Image>()
-        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.key.insect}${IO.key.value}"))
+        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.Key.INSECT}${IO.Key.VALUE}"))
         if (!jsonElement.isJsonNull) {
             jsonElement.asJsonArray.forEach {
                 var element = Network.gson.fromJson(it, InsectVO::class.java)

@@ -13,6 +13,7 @@ import com.example.anch_kotiln.Utility.Common
 import com.example.anch_kotiln.Model.DTO.ReactionDTO
 import com.example.anch_kotiln.Utility.IO
 import kotlinx.android.synthetic.main.item_reaction.view.*
+import org.w3c.dom.Text
 
 class ReactionRecyclerAdapter(val context: Context, list: ArrayList<ReactionDTO>) :
     RecyclerView.Adapter<ReactionRecyclerAdapter.ViewHolder>(), Filterable {
@@ -30,24 +31,24 @@ class ReactionRecyclerAdapter(val context: Context, list: ArrayList<ReactionDTO>
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.reactionImageView.setImageBitmap(BitmapFactory.decodeFile("${IO.file.path}/${filteredData[position].imageIconResource}"))
-        holder.reactionNameValueTextView.text = filteredData[position].name
-        holder.reactionSoruceValueTextView.text = "\"${filteredData[position].source}\" 성격을 가진 동물이 가르쳐 줌"
-        if(filteredData[position].sourceNote.length > 0) {
-            holder.reactionSourceNoteValueTextView.isVisible = true
-            holder.reactionSourceNoteValueTextView.text = "단, ${filteredData[position].sourceNote}"
+        holder.imageView.setImageBitmap(BitmapFactory.decodeFile("${IO.file.path}/${filteredData[position].imageIconResource}"))
+        holder.nameValueTextView.text = filteredData[position].name
+        holder.soruceValueTextView.text = "\"${filteredData[position].source}\" 성격을 가진 동물이 가르쳐 줌"
+        if(filteredData[position].sourceNote.isNotEmpty()) {
+            holder.sourceNoteValueTextView.isVisible = true
+            holder.sourceNoteValueTextView.text = "단, ${filteredData[position].sourceNote}"
         }
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val reactionImageView = itemView.reactionImageView
-        val reactionNameValueTextView = itemView.reactionNameTextView
-        val reactionSoruceValueTextView = itemView.reactionSourceTextView
-        val reactionSourceNoteValueTextView = itemView.reactionSourceNoteTextView
     }
 
     override fun getFilter(): ListFilter {
         return filter
+    }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imageView: ImageView = itemView.reactionImageView
+        val nameValueTextView: TextView = itemView.reactionNameTextView
+        val soruceValueTextView: TextView = itemView.reactionSourceTextView
+        val sourceNoteValueTextView: TextView = itemView.reactionSourceNoteTextView
     }
 
     inner class ListFilter() : Filter() {

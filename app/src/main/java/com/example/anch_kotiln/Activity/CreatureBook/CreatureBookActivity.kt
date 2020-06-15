@@ -3,27 +3,24 @@ package com.example.anch_kotiln.Activity.CreatureBook
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Adapter
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anch_kotiln.Activity.Menu.MainActivity
-import com.example.anch_kotiln.Adapter.ItemRecyclerAdapter
+import com.example.anch_kotiln.Adapter.ItemCategoryRecyclerAdapter
 import com.example.anch_kotiln.Utility.Common
-import com.example.anch_kotiln.Model.DTO.*
 import com.example.anch_kotiln.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlinx.android.synthetic.main.activity_creature_book.*
 
 class CreatureBookActivity : AppCompatActivity() {
-    private lateinit var realtimeAdapter: ItemRecyclerAdapter
-    private lateinit var insectAdapter: ItemRecyclerAdapter
-    private lateinit var fishAdapter: ItemRecyclerAdapter
+    private lateinit var realtimeAdapter: ItemCategoryRecyclerAdapter
+    private lateinit var insectAdapter: ItemCategoryRecyclerAdapter
+    private lateinit var fishAdapter: ItemCategoryRecyclerAdapter
     private var tabPostion: Int = 0
 
     //툴바 관련 시작
@@ -90,18 +87,21 @@ class CreatureBookActivity : AppCompatActivity() {
 
     private fun bind() {
         //각 객체별 어댑터와 bind
-        realtimeAdapter = ItemRecyclerAdapter(
+        realtimeAdapter = ItemCategoryRecyclerAdapter(
             this,
             MainActivity.creatureController.getModel()
-        )
-        insectAdapter = ItemRecyclerAdapter(
+        ,5)
+        realtimeAdapter.setHasStableIds(true)
+        insectAdapter = ItemCategoryRecyclerAdapter(
             this,
             MainActivity.creatureController.insectController.getModel()
-        )
-        fishAdapter = ItemRecyclerAdapter(
+        ,5)
+        insectAdapter.setHasStableIds(true)
+        fishAdapter = ItemCategoryRecyclerAdapter(
             this,
             MainActivity.creatureController.fishController.getModel()
-        )
+        , 5)
+        fishAdapter.setHasStableIds(true)
 
         realtimeRecyclerView.adapter = realtimeAdapter
         realtimeRecyclerView.layoutManager = LinearLayoutManager(this)

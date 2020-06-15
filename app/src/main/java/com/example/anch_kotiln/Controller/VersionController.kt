@@ -45,7 +45,7 @@ class VersionController {
                 Log.d(tag, "Request Fail!")
                 Log.d(tag, "message : ${t.message}")
                 mCallback.updateProgressBar("서버와 연결하는데 실패했습니다.")
-                if (!IO.preferenceManager.getBoolean(IO.key.first)) {
+                if (!IO.preferenceManager.getBoolean(IO.Key.FIRST.toString())) {
                     mCallback.connect(Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER)
                 } else {
                     mCallback.connect(Network.Status.FAIL_CONNECT_TO_SERVER)
@@ -64,16 +64,16 @@ class VersionController {
                 Log.d(tag, "response code : ${response.code()}")
                 Log.d(tag, "response url : ${response.raw().request().url()}")
 
-                IO.preferenceManager.setValue(IO.key.version, Network.gson.toJson(response.body()))
-                Log.d(tag, "${IO.preferenceManager.getValue(IO.key.version)}")
+                IO.preferenceManager.setValue(IO.Key.VERSION.toString(), Network.gson.toJson(response.body()))
+                Log.d(tag, "${IO.preferenceManager.getValue(IO.Key.VERSION.toString())}")
 
                 val versionArray =
-                    JsonParser().parse(IO.preferenceManager.getValue(IO.key.version)).asJsonArray
+                    JsonParser().parse(IO.preferenceManager.getValue(IO.Key.VERSION.toString())).asJsonArray
                 if (!versionArray.isJsonNull) {
                     versionArray.forEach {
                         var vo = Network.gson.fromJson(it, VersionVO::class.java)
                         if ((IO.preferenceManager.getVersion(vo.tableName) != vo.version) or (!IO.preferenceManager.getBoolean(
-                                "${vo.tableName}${IO.key.finishUpdate}"
+                                "${vo.tableName}${IO.Key.FINISH_UPDATE}"
                             ))
                         ) {
                             foundUpdate++
@@ -85,24 +85,24 @@ class VersionController {
                         )
                         Log.d(
                             tag,
-                            "require Update : ${!IO.preferenceManager.getBoolean("${vo.tableName}${IO.key.finishUpdate}")}"
+                            "require Update : ${!IO.preferenceManager.getBoolean("${vo.tableName}${IO.Key.FINISH_UPDATE}")}"
                         )
                     }
                 }
 
                 mCallback.updateProgressBar("서버와 연결하는데 성공했습니다.")
 
-                if(IO.preferenceManager.getBoolean(IO.key.exceptionUpdate)) { // 업데이트 중 오류 발견
-                    Log.d(tag, "Found Exception File :: ${IO.preferenceManager.getValue(IO.key.exceptionUpdateData)}")
-                    if(File(IO.preferenceManager.getValue(IO.key.exceptionUpdateData)).exists()) {
-                        File(IO.preferenceManager.getValue(IO.key.exceptionUpdateData)).delete()
-                        IO.preferenceManager.removeValue(IO.key.exceptionUpdate)
-                        IO.preferenceManager.removeValue(IO.key.exceptionUpdateData)
+                if(IO.preferenceManager.getBoolean(IO.Key.EXCEPTION_UPDATE.toString())) { // 업데이트 중 오류 발견
+                    Log.d(tag, "Found Exception File :: ${IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())}")
+                    if(File(IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())).exists()) {
+                        File(IO.preferenceManager.getValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())).delete()
+                        IO.preferenceManager.removeValue(IO.Key.EXCEPTION_UPDATE.toString())
+                        IO.preferenceManager.removeValue(IO.Key.EXCEPTION_UPDATE_DATA.toString())
                         Log.d(tag, "Exception File Delete")
                     }
                 }
 
-                if (!IO.preferenceManager.getBoolean(IO.key.first)) {
+                if (!IO.preferenceManager.getBoolean(IO.Key.FIRST.toString())) {
                     mCallback.connect(Network.Status.FIRST) // 최초 기동
                 } else {
                     if (foundUpdate > 0) {
@@ -117,18 +117,18 @@ class VersionController {
 
     fun update() {
         val versionArray =
-            JsonParser().parse(IO.preferenceManager.getValue(IO.key.version)).asJsonArray
+            JsonParser().parse(IO.preferenceManager.getValue(IO.Key.VERSION.toString())).asJsonArray
         if (!versionArray.isJsonNull) {
             versionArray.forEach {
                 var vo = Network.gson.fromJson(it, VersionVO::class.java)
                 if ((IO.preferenceManager.getVersion(vo.tableName) != vo.version) or (!IO.preferenceManager.getBoolean(
-                        "${vo.tableName}${IO.key.finishUpdate}"
+                        "${vo.tableName}${IO.Key.FINISH_UPDATE}"
                     ))
                 ) {
                     Log.d(tag, vo.tableName)
-                    requireUpdate("${vo.tableName}${IO.key.value}")
+                    requireUpdate("${vo.tableName}${IO.Key.VALUE}")
                 } else {
-                    notRequireUpdate("${vo.tableName}${IO.key.value}")
+                    notRequireUpdate("${vo.tableName}${IO.Key.VALUE}")
                 }
             }
         }
@@ -136,24 +136,24 @@ class VersionController {
 
     fun jsonToData() {
         val versionArray =
-            JsonParser().parse(IO.preferenceManager.getValue(IO.key.version)).asJsonArray
+            JsonParser().parse(IO.preferenceManager.getValue(IO.Key.VERSION.toString())).asJsonArray
         if (!versionArray.isJsonNull) {
             versionArray.forEach {
                 var vo = Network.gson.fromJson(it, VersionVO::class.java)
-                notRequireUpdate("${vo.tableName}${IO.key.value}")
+                notRequireUpdate("${vo.tableName}${IO.Key.VALUE}")
             }
         }
     }
 
     fun finishUpdate() {
-        IO.preferenceManager.setBoolean(IO.key.first, true)
+        IO.preferenceManager.setBoolean(IO.Key.FIRST.toString(), true)
         val versionArray =
-            JsonParser().parse(IO.preferenceManager.getValue(IO.key.version)).asJsonArray
+            JsonParser().parse(IO.preferenceManager.getValue(IO.Key.VERSION.toString())).asJsonArray
         if (!versionArray.isJsonNull) {
             versionArray.forEach {
                 var vo = Network.gson.fromJson(it, VersionVO::class.java)
                 IO.preferenceManager.setVersion(vo.tableName, vo.version)
-                IO.preferenceManager.setBoolean("${vo.tableName}${IO.key.finishUpdate}", true)
+                IO.preferenceManager.setBoolean("${vo.tableName}${IO.Key.FINISH_UPDATE}", true)
             }
         }
     }
@@ -169,21 +169,21 @@ class VersionController {
 
     private fun requireUpdate(tableName: String) {
         when (tableName) {
-            "${IO.key.villager}${IO.key.value}" -> MainActivity.villagerController.request()
-            "${IO.key.art}${IO.key.value}" -> MainActivity.artController.request()
-            "${IO.key.fish}${IO.key.value}" -> MainActivity.creatureController.fishController.request()
-            "${IO.key.insect}${IO.key.value}" -> MainActivity.creatureController.insectController.request()
-            "${IO.key.reaction}${IO.key.value}" -> MainActivity.reactionController.request()
+            "${IO.Key.VILLAGER}${IO.Key.VALUE}" -> MainActivity.villagerController.request()
+            "${IO.Key.ART}${IO.Key.VALUE}" -> MainActivity.artController.request()
+            "${IO.Key.FISH}${IO.Key.VALUE}" -> MainActivity.creatureController.fishController.request()
+            "${IO.Key.INSECT}${IO.Key.VALUE}" -> MainActivity.creatureController.insectController.request()
+            "${IO.Key.REACTION}${IO.Key.VALUE}" -> MainActivity.reactionController.request()
         }
     }
 
     private fun notRequireUpdate(tableName: String) {
         when (tableName) {
-            "${IO.key.villager}${IO.key.value}" -> MainActivity.villagerController.jsonToData()
-            "${IO.key.art}${IO.key.value}" -> MainActivity.artController.jsonToData()
-            "${IO.key.fish}${IO.key.value}" -> MainActivity.creatureController.fishController.jsonToData()
-            "${IO.key.insect}${IO.key.value}" -> MainActivity.creatureController.insectController.jsonToData()
-            "${IO.key.reaction}${IO.key.value}" -> MainActivity.reactionController.jsonToData()
+            "${IO.Key.VILLAGER}${IO.Key.VALUE}" -> MainActivity.villagerController.jsonToData()
+            "${IO.Key.ART}${IO.Key.VALUE}" -> MainActivity.artController.jsonToData()
+            "${IO.Key.FISH}${IO.Key.VALUE}" -> MainActivity.creatureController.fishController.jsonToData()
+            "${IO.Key.INSECT}${IO.Key.VALUE}" -> MainActivity.creatureController.insectController.jsonToData()
+            "${IO.Key.REACTION}${IO.Key.VALUE}" -> MainActivity.reactionController.jsonToData()
         }
     }
 

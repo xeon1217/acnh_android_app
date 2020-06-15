@@ -2,16 +2,14 @@ package com.example.anch_kotiln.Activity.Menu
 
 import android.app.Activity
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import com.example.anch_kotiln.Activity.Dialog.CustomDialog
+import com.example.anch_kotiln.Activity.Dialog.Dialog
 import com.example.anch_kotiln.Controller.*
 import com.example.anch_kotiln.R
 import com.example.anch_kotiln.Utility.Network
@@ -48,43 +46,37 @@ class MainActivity : AppCompatActivity() {
                     mainStatusTextview.text = getString(R.string.status_updating)
                     mainStatusProgressBar.isVisible = true
 
-                    intent = Intent(context, CustomDialog::class.java)
-                    intent.putExtra("title", getString(R.string.action_first_app_start_title))
-                    intent.putExtra("message", getString(R.string.action_first_app_start_message))
-                    intent.putExtra("positive", getString(R.string.receive_it))
-                    intent.putExtra("negative", getString(R.string.receive_not_it))
-                    startActivityForResult(intent, Network.Status.FIRST.getValue())
+                    intent = Intent(context, Dialog::class.java)
+                    intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_first_app_start_title))
+                    intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_first_app_start_message))
+                    intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.receive_it))
+                    intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.receive_not_it))
+                    startActivityForResult(intent, Network.Status.FIRST.toInt())
                 }
                 Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER -> {
                     mainStatusTextview.text = getString(R.string.status_failure_connect_to_server)
 
-                    intent = Intent(context, CustomDialog::class.java)
-                    intent.putExtra(
-                        "title",
-                        getString(R.string.action_failure_connect_to_server_title)
-                    )
-                    intent.putExtra(
-                        "message",
-                        getString(R.string.action_failure_connect_to_server_message)
-                    )
-                    intent.putExtra("positive", getString(R.string.retry))
-                    intent.putExtra("negative", getString(R.string.do_not_it))
+                    intent = Intent(context, Dialog::class.java)
+                    intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_failure_connect_to_server_title))
+                    intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_failure_connect_to_server_message))
+                    intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.retry))
+                    intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.do_not_it))
                     startActivityForResult(
                         intent,
-                        Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.getValue()
+                        Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.toInt()
                     )
                 }
                 Network.Status.REQUIRE_UPDATE -> {
                     mainStatusTextview.text = getString(R.string.status_updating)
                     mainStatusProgressBar.isVisible = true
 
-                    intent = Intent(context, CustomDialog::class.java)
-                    intent.putExtra("title", getString(R.string.action_found_to_update_title))
-                    intent.putExtra("message", getString(R.string.action_found_to_update_message))
-                    intent.putExtra("positive", getString(R.string.do_it))
-                    intent.putExtra("negative", getString(R.string.do_not_it))
-                    intent.putExtra("neutral", getString(R.string.afterward_do_it))
-                    startActivityForResult(intent, Network.Status.REQUIRE_UPDATE.getValue())
+                    intent = Intent(context, Dialog::class.java)
+                    intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_found_to_update_title))
+                    intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_found_to_update_message))
+                    intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.do_it))
+                    intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.do_not_it))
+                    intent.putExtra(Dialog.Text.NEUTRAL.toString(), getString(R.string.afterward_do_it))
+                    startActivityForResult(intent, Network.Status.REQUIRE_UPDATE.toInt())
                 }
                 Network.Status.NOT_REQUIRE_UPDATE -> {
                     mainStatusTextview.text = getString(R.string.status_not_require_update)
@@ -94,19 +86,13 @@ class MainActivity : AppCompatActivity() {
                 Network.Status.FAIL_CONNECT_TO_SERVER -> {
                     mainStatusTextview.text = getString(R.string.status_failure_connect_to_server)
 
-                    intent = Intent(context, CustomDialog::class.java)
-                    intent.putExtra(
-                        "title",
-                        getString(R.string.action_failure_connect_to_server_title)
-                    )
-                    intent.putExtra(
-                        "message",
-                        getString(R.string.action_failure_connect_to_server_message)
-                    )
-                    intent.putExtra("positive", getString(R.string.retry))
-                    intent.putExtra("negative", getString(R.string.exit))
-                    intent.putExtra("neutral", getString(R.string.afterward_do_it))
-                    startActivityForResult(intent, Network.Status.FAIL_CONNECT_TO_SERVER.getValue())
+                    intent = Intent(context, Dialog::class.java)
+                    intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_failure_connect_to_server_title))
+                    intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_failure_connect_to_server_message))
+                    intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.retry))
+                    intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.exit))
+                    intent.putExtra(Dialog.Text.NEUTRAL.toString(), getString(R.string.afterward_do_it))
+                    startActivityForResult(intent, Network.Status.FAIL_CONNECT_TO_SERVER.toInt())
                 }
                 Network.Status.SUCCESS_CONNECT_TO_SERVER -> {
                 }
@@ -118,15 +104,12 @@ class MainActivity : AppCompatActivity() {
                 Network.Status.ERROR_CANCELED_UPDATE -> {
                     mainStatusTextview.text = getString(R.string.status_failure_connect_to_server)
 
-                    intent = Intent(context, CustomDialog::class.java)
-                    intent.putExtra("title", getString(R.string.action_error_cancel_update_title))
-                    intent.putExtra(
-                        "message",
-                        getString(R.string.action_error_cancel_update_message)
-                    )
-                    intent.putExtra("positive", getString(R.string.retry))
-                    intent.putExtra("negative", getString(R.string.exit))
-                    startActivityForResult(intent, Network.Status.ERROR_CANCELED_UPDATE.getValue())
+                    intent = Intent(context, Dialog::class.java)
+                    intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_error_cancel_update_title))
+                    intent.putExtra(Dialog.Text.MESSAGE.toString(), getString(R.string.action_error_cancel_update_message))
+                    intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.retry))
+                    intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.exit))
+                    startActivityForResult(intent, Network.Status.ERROR_CANCELED_UPDATE.toInt())
                 }
             }
         }
@@ -150,44 +133,41 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        var response = data?.getIntExtra("response", -1)
-        Log.d(tag, "request :: $requestCode")
-        Log.d(tag, "result :: $resultCode")
-        Log.d(tag, "response :: $response")
+        var response = data?.getIntExtra(Dialog.Text.RESPONSE.toString(), Dialog.Button.NULL.toInt())
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 99 -> { // onCancelButtonClick, 업데이트 중 취소 버튼
                     when (response) {
-                        0 -> exit()
+                        Dialog.Button.POSITIVE.toInt() -> exit()
                     }
                 }
-                Network.Status.FIRST.getValue() -> {
+                Network.Status.FIRST.toInt() -> {
                     when (response) {
-                        0 -> {
+                        Dialog.Button.POSITIVE.toInt() -> {
                             mainStatusTextviewCancelButton.isVisible = true
                             versionController.update()
                         }
-                        1 -> exit()
+                        Dialog.Button.NEGATIVE.toInt() -> exit()
                     }
                 }
-                Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.getValue() -> {
+                Network.Status.FIRST_AND_FAIL_CONNECT_TO_SERVER.toInt() -> {
                     when (response) {
-                        0 -> {
+                        Dialog.Button.POSITIVE.toInt() -> {
                             mainStatusTextview.text =
                                 getString(R.string.status_connecting_to_server)
                             versionController.retryUpdate()
                         }
-                        1 -> exit()
+                        Dialog.Button.NEGATIVE.toInt() -> exit()
                     }
                 }
-                Network.Status.REQUIRE_UPDATE.getValue() -> {
+                Network.Status.REQUIRE_UPDATE.toInt() -> {
                     when (response) {
-                        0 -> {
+                        Dialog.Button.POSITIVE.toInt() -> {
                             mainStatusTextviewCancelButton.isVisible = true
                             versionController.update()
                         }
-                        1 -> exit()
-                        2 -> {
+                        Dialog.Button.NEGATIVE.toInt() -> exit()
+                        Dialog.Button.NEUTRAL.toInt() -> {
                             versionController.jsonToData()
                             startActivity(
                                 Intent(
@@ -199,15 +179,15 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                Network.Status.FAIL_CONNECT_TO_SERVER.getValue() -> {
+                Network.Status.FAIL_CONNECT_TO_SERVER.toInt() -> {
                     when (response) {
-                        0 -> {
+                        Dialog.Button.POSITIVE.toInt() -> {
                             mainStatusTextview.text =
                                 getString(R.string.status_connecting_to_server)
                             versionController.retryUpdate()
                         }
-                        1 -> exit()
-                        2 -> {
+                        Dialog.Button.NEGATIVE.toInt() -> exit()
+                        Dialog.Button.NEUTRAL.toInt() -> {
                             versionController.jsonToData()
                             startActivity(
                                 Intent(
@@ -219,14 +199,14 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                Network.Status.ERROR_CANCELED_UPDATE.getValue() -> {
+                Network.Status.ERROR_CANCELED_UPDATE.toInt() -> {
                     when (response) {
-                        0 -> {
+                        Dialog.Button.POSITIVE.toInt() -> {
                             mainStatusTextview.text =
                                 getString(R.string.status_connecting_to_server)
                             versionController.retryUpdate()
                         }
-                        1 -> exit()
+                        Dialog.Button.NEGATIVE.toInt() -> exit()
                     }
                 }
             }
@@ -252,10 +232,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onCancelButtonClick(v: View) {
-        var intent = Intent(this, CustomDialog::class.java)
-        intent.putExtra("title", getString(R.string.action_cancel_update_title))
-        intent.putExtra("positive", getString(R.string.yes))
-        intent.putExtra("negative", getString(R.string.no))
+        var intent = Intent(this, Dialog::class.java)
+        intent.putExtra(Dialog.Text.TITLE.toString(), getString(R.string.action_cancel_update_title))
+        intent.putExtra(Dialog.Text.POSITIVE.toString(), getString(R.string.yes))
+        intent.putExtra(Dialog.Text.NEGATIVE.toString(), getString(R.string.no))
         startActivityForResult(intent, 99)
     }
 

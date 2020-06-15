@@ -35,7 +35,7 @@ class VillagerController : Controller {
 
             override fun onResponse(call: Call<List<VillagerVO>>, response: Response<List<VillagerVO>>) {
                 Log.d(TAG, "Request Success!")
-                IO.preferenceManager.setValue("${IO.key.villager}${IO.key.value}", Network.gson.toJson(response.body()))
+                IO.preferenceManager.setValue("${IO.Key.VILLAGER}${IO.Key.VALUE}", Network.gson.toJson(response.body()))
                 versionCallback.successRequest(jsonToData())
             }
         })
@@ -44,7 +44,7 @@ class VillagerController : Controller {
     override fun jsonToData() : ArrayList<IO.Image> {
         val result = ArrayList<VillagerDTO>()
         val images = ArrayList<IO.Image>()
-        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.key.villager}${IO.key.value}"))
+        val jsonElement = JsonParser().parse(IO.preferenceManager.getValue("${IO.Key.VILLAGER}${IO.Key.VALUE}"))
         if (!jsonElement.isJsonNull) {
             jsonElement.asJsonArray.forEach {
                 var element = Network.gson.fromJson(it, VillagerVO::class.java)

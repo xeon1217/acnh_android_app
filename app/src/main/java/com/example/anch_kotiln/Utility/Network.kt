@@ -28,7 +28,7 @@ class Network {
     }
 
     // 서버와의 연결에 관련
-    enum class Status(private val value: Int) {
+    enum class Status(private val type: Int) {
         FIRST(0), // 처음으로 앱을 실행했을 때
         FIRST_AND_FAIL_CONNECT_TO_SERVER(1), // 처음으로 앱을 실행했으나, 서버와 연결을 하지 못했을 때
         FAIL_CONNECT_TO_SERVER(2), // 서버와 연결에 실패했을 때
@@ -38,9 +38,8 @@ class Network {
         SUCCESS_UPDATE(6), // 업데이트를 성공했을 때
         CANCELED_UPDATE(7), // 업데이트를 취소했을 때
         ERROR_CANCELED_UPDATE(8); // 오류로 인해 업데이트가 취소되었을 때
-
-        fun getValue(): Int {
-            return value
+        fun toInt(): Int {
+            return type
         }
     }
 }

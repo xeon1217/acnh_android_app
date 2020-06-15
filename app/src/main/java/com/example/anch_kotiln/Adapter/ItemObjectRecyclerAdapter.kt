@@ -1,7 +1,5 @@
 package com.example.anch_kotiln.Adapter
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -10,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.example.anch_kotiln.Activity.CreatureBook.CreatureBookFishPopupActivity
 import com.example.anch_kotiln.Activity.CreatureBook.CreatureBookInsectPopupActivity
@@ -20,11 +16,9 @@ import com.example.anch_kotiln.R
 import com.example.anch_kotiln.Activity.VillagerList.VillagerListPopupActivity
 import com.example.anch_kotiln.Utility.IO
 import kotlinx.android.synthetic.main.item_object.view.*
-import java.util.zip.Inflater
 
-class CategoryRecyclerAdapter(val context: Context, list: ArrayList<ObjectDTO>) :
-    RecyclerView.Adapter<CategoryRecyclerAdapter.ViewHolder>() {
-    private val rawData: ArrayList<ObjectDTO> = list
+class ItemObjectRecyclerAdapter(val context: Context, rawData: ArrayList<ObjectDTO>) :
+    RecyclerView.Adapter<ItemObjectRecyclerAdapter.ViewHolder>() {
     private var filteredData: ArrayList<ObjectDTO> = rawData
 
     override fun onCreateViewHolder(
@@ -51,7 +45,7 @@ class CategoryRecyclerAdapter(val context: Context, list: ArrayList<ObjectDTO>) 
         }
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemImageView: ImageView = itemView.itemImageView
         val itemNameTextView: TextView = itemView.itemNameTextView
     }

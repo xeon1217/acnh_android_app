@@ -13,9 +13,7 @@ import com.example.anch_kotiln.R
 import kotlinx.android.synthetic.main.activity_reaction_list.*
 
 class ReactionListActivity : AppCompatActivity() {
-    val reactionBookAdapter = ReactionRecyclerAdapter(this,
-        MainActivity.reactionController.getItems()
-    )
+    private lateinit var reactionBookAdapter: ReactionRecyclerAdapter
 
     private fun initToolbar() {
         reactionListToolbar.title = getString(R.string.title_activity_reaction_list)
@@ -50,6 +48,9 @@ class ReactionListActivity : AppCompatActivity() {
     // 툴바 관련 끝
 
     private fun bind() {
+        reactionBookAdapter = ReactionRecyclerAdapter(this, MainActivity.reactionController.getItems())
+        reactionBookAdapter.setHasStableIds(true)
+
         reactionListRecyclerView.adapter = reactionBookAdapter
         reactionListRecyclerView.layoutManager = LinearLayoutManager(this)
     }
